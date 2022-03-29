@@ -1,0 +1,401 @@
+2022-03-09 19:18:39,655 - INFO - client               Адрес для соединения - 127.0.0.1, порт - 7777
+2022-03-09 19:18:39,656 - INFO - utils                Функция presence_msg выполнена успешно.
+2022-03-09 19:18:39,657 - INFO - utils                Функция process_response выполнена успешно.
+2022-03-09 19:20:36,967 - INFO - client               Адрес для соединения - 127.0.0.1, порт - 7777
+2022-03-09 19:20:36,968 - INFO - utils                Функция presence_msg выполнена успешно.
+2022-03-09 19:20:36,969 - INFO - utils                Функция process_response выполнена успешно.
+2022-03-10 16:46:59,382 - INFO - client               Адрес для соединения - 127.0.0.1, порт - 7777
+2022-03-10 16:46:59,383 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. Вызов из модуля __main__.
+2022-03-10 16:46:59,384 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'time': 1646920019.3834963},), {}. Вызов из модуля __main__.
+2022-03-10 16:48:45,425 - INFO - client               Адрес для соединения - 127.0.0.1, порт - 7777
+2022-03-10 16:48:45,426 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-10 16:48:45,427 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'time': 1646920125.4273803},), {}. 
+2022-03-10 16:50:25,709 - INFO - client               Адрес для соединения - 127.0.0.1, порт - 7777
+2022-03-10 16:50:25,710 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-10 16:50:25,710 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'time': 1646920225.7105029},), {}. 
+2022-03-25 15:21:32,026 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:21:34,041 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:21:58,574 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:21:58,576 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:22:08,619 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:22:16,048 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:23:15,257 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:23:15,265 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:26:59,170 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:27:00,741 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:27:29,764 - ERROR - client               Функция create_message с параметрами (), {} выполнена с ошибкой.
+2022-03-25 15:34:49,413 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:35:31,245 - DEBUG - client               Была вызвана функция process_message_from_server c параметрами ({'action': 'presence', 'time': 1648211689.413692, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {}. 
+2022-03-25 15:36:47,037 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:36:47,037 - DEBUG - client               Была вызвана функция process_response c параметрами (), {}. 
+2022-03-25 15:36:47,037 - ERROR - client               Функция process_response с параметрами (), {} выполнена с ошибкой.
+2022-03-25 15:36:47,044 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:36:47,045 - DEBUG - client               Была вызвана функция process_response c параметрами (), {}. 
+2022-03-25 15:36:47,045 - ERROR - client               Функция process_response с параметрами (), {} выполнена с ошибкой.
+2022-03-25 15:36:47,056 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:36:47,057 - DEBUG - client               Была вызвана функция process_response c параметрами (), {}. 
+2022-03-25 15:36:47,057 - ERROR - client               Функция process_response с параметрами (), {} выполнена с ошибкой.
+2022-03-25 15:36:47,058 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:36:47,058 - DEBUG - client               Была вызвана функция process_response c параметрами (), {}. 
+2022-03-25 15:36:47,058 - ERROR - client               Функция process_response с параметрами (), {} выполнена с ошибкой.
+2022-03-25 15:36:47,064 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:36:47,064 - DEBUG - client               Была вызвана функция process_response c параметрами (), {}. 
+2022-03-25 15:36:47,064 - ERROR - client               Функция process_response с параметрами (), {} выполнена с ошибкой.
+2022-03-25 15:37:16,483 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:37:16,483 - DEBUG - client               Была вызвана функция process_response c параметрами (), {}. 
+2022-03-25 15:37:16,483 - ERROR - client               Функция process_response с параметрами (), {} выполнена с ошибкой.
+2022-03-25 15:38:51,836 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:38:51,848 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:38:51,849 - DEBUG - client               Была вызвана функция process_response c параметрами ({'action': 'presence', 'time': 1648211931.8362508, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {}. 
+2022-03-25 15:38:51,849 - ERROR - client               Функция process_response с параметрами ({'action': 'presence', 'time': 1648211931.8362508, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {} выполнена с ошибкой.
+2022-03-25 15:38:51,850 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:38:51,851 - DEBUG - client               Была вызвана функция process_response c параметрами ({'action': 'presence', 'time': 1648211931.8482518, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {}. 
+2022-03-25 15:38:51,851 - ERROR - client               Функция process_response с параметрами ({'action': 'presence', 'time': 1648211931.8482518, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {} выполнена с ошибкой.
+2022-03-25 15:38:51,858 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:38:51,858 - DEBUG - client               Была вызвана функция process_response c параметрами ({'action': 'presence', 'time': 1648211931.8512526, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {}. 
+2022-03-25 15:38:51,858 - ERROR - client               Функция process_response с параметрами ({'action': 'presence', 'time': 1648211931.8512526, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {} выполнена с ошибкой.
+2022-03-25 15:38:51,871 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:38:51,872 - DEBUG - client               Была вызвана функция process_response c параметрами ({'action': 'presence', 'time': 1648211931.871257, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {}. 
+2022-03-25 15:38:51,872 - DEBUG - client               Была вызвана функция process_response c параметрами ({'action': 'presence', 'time': 1648211931.8582551, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {}. 
+2022-03-25 15:38:51,872 - ERROR - client               Функция process_response с параметрами ({'action': 'presence', 'time': 1648211931.871257, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {} выполнена с ошибкой.
+2022-03-25 15:38:51,872 - ERROR - client               Функция process_response с параметрами ({'action': 'presence', 'time': 1648211931.8582551, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {} выполнена с ошибкой.
+2022-03-25 15:39:06,785 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:39:06,786 - DEBUG - client               Была вызвана функция process_response c параметрами ({'action': 'presence', 'time': 1648211946.786287, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {}. 
+2022-03-25 15:39:06,786 - ERROR - client               Функция process_response с параметрами ({'action': 'presence', 'time': 1648211946.786287, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {} выполнена с ошибкой.
+2022-03-25 15:40:51,336 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:40:59,912 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:40:59,913 - DEBUG - client               Была вызвана функция process_response c параметрами ({'action': 'presence', 'time': 1648212059.913404, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {}. 
+2022-03-25 15:40:59,913 - ERROR - client               Функция process_response с параметрами ({'action': 'presence', 'time': 1648212059.913404, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {} выполнена с ошибкой.
+2022-03-25 15:40:59,913 - DEBUG - client               Была вызвана функция process_response c параметрами ({'action': 'presence', 'time': 1648212051.3369815, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {}. 
+2022-03-25 15:40:59,913 - ERROR - client               Функция process_response с параметрами ({'action': 'presence', 'time': 1648212051.3369815, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {} выполнена с ошибкой.
+2022-03-25 15:41:25,497 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:41:25,497 - DEBUG - client               Была вызвана функция process_response c параметрами ({'action': 'presence', 'time': 1648212085.4971812, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {}. 
+2022-03-25 15:41:25,497 - ERROR - client               Функция process_response с параметрами ({'action': 'presence', 'time': 1648212085.4971812, 'type': 'status', 'user': {'account_name': 'Sergei', 'status': 'Doing my homework!'}},), {} выполнена с ошибкой.
+2022-03-25 15:42:50,819 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:43:26,465 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:43:59,862 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:44:22,237 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:44:30,907 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:44:39,752 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:44:56,656 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:45:28,319 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:45:28,319 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:45:34,085 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:45:45,951 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:46:41,473 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:46:41,494 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:46:41,494 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:46:41,494 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:46:41,503 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:46:41,503 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:46:41,504 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:46:41,507 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:46:41,507 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:46:41,507 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:46:41,507 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:46:41,507 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:46:46,164 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:48:27,676 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:48:43,207 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:48:57,749 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:49:23,644 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:49:23,644 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:49:31,432 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:49:38,176 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:52:29,859 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:52:41,679 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:53:11,114 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:53:21,337 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:53:21,337 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:53:26,433 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:53:48,413 - DEBUG - client               Была вызвана функция process_message_from_server c параметрами ({'action': 'msg', 'time': 1648212826.2697425, 'account_name': 'Sergei', 'message_text': 'qwe'},), {}. 
+2022-03-25 15:54:39,936 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:54:39,962 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:54:39,963 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:54:39,963 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:54:39,963 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:54:39,964 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:54:39,965 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:54:39,965 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 15:54:39,966 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:54:39,966 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:54:39,966 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:54:39,966 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-25 15:54:43,329 - DEBUG - client               Была вызвана функция create_message c параметрами (), {}. 
+2022-03-25 15:54:43,521 - DEBUG - client               Была вызвана функция process_message_from_server c параметрами ({'action': 'msg', 'time': 1648212883.5218897, 'account_name': 'Sergei', 'message_text': 'eqweqeq'},), {}. 
+2022-03-25 15:54:43,521 - DEBUG - client               Была вызвана функция process_message_from_server c параметрами ({'action': 'msg', 'time': 1648212883.5218897, 'account_name': 'Sergei', 'message_text': 'eqweqeq'},), {}. 
+2022-03-25 15:54:43,521 - DEBUG - client               Была вызвана функция process_message_from_server c параметрами ({'action': 'msg', 'time': 1648212883.5218897, 'account_name': 'Sergei', 'message_text': 'eqweqeq'},), {}. 
+2022-03-25 22:55:30,592 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-25 22:55:41,165 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-28 02:38:01,029 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-28 02:38:54,549 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-28 14:17:40,460 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-28 14:17:40,460 - ERROR - client               Функция presence_msg с параметрами (), {} выполнена с ошибкой.
+2022-03-28 14:18:12,633 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-28 14:18:12,633 - ERROR - client               Функция presence_msg с параметрами (), {} выполнена с ошибкой.
+2022-03-28 14:18:26,848 - DEBUG - client               Была вызвана функция presence_msg c параметрами (), {}. 
+2022-03-28 14:18:26,848 - ERROR - client               Функция presence_msg с параметрами (), {} выполнена с ошибкой.
+2022-03-28 14:19:08,024 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('Sergei',), {}. 
+2022-03-28 14:21:30,524 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('Sergei',), {}. 
+2022-03-28 14:22:17,925 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('Sergei',), {}. 
+2022-03-28 14:23:59,101 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('Sergei',), {}. 
+2022-03-28 14:38:11,382 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 14:38:11,382 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x0000023B20327520>,), {}. 
+2022-03-28 14:38:52,325 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 14:38:52,325 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x00000243A3004700>,), {}. 
+2022-03-28 14:39:18,532 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 14:39:41,352 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-28 14:39:41,352 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000002EAA853E7F0>,), {}. 
+2022-03-28 14:40:55,146 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 14:41:08,136 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-28 14:41:08,136 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x0000026D51D1E7F0>,), {}. 
+2022-03-28 14:42:29,895 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 14:42:36,499 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-28 14:42:36,500 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001D8EE5BE7F0>,), {}. 
+2022-03-28 14:43:48,583 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 14:43:52,820 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-28 14:43:52,820 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x0000018F5DDFE7F0>,), {}. 
+2022-03-28 14:44:32,402 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 14:44:32,402 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000002AFEE60E7F0>,), {}. 
+2022-03-28 14:46:17,984 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 14:46:41,765 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 14:46:41,765 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001BA514FE7F0>,), {}. 
+2022-03-28 14:47:41,670 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 14:47:48,146 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 14:47:48,147 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001BF7819E7F0>,), {}. 
+2022-03-28 14:49:35,673 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 14:49:54,776 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 14:49:54,777 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000002285ACCC940>,), {}. 
+2022-03-28 14:51:33,668 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 14:53:16,848 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 14:53:25,188 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 14:53:25,188 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001EB1876C940>,), {}. 
+2022-03-28 14:54:56,332 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-28 14:54:56,332 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000002476CC3C940>,), {}. 
+2022-03-28 14:57:16,573 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test3',), {}. 
+2022-03-28 14:57:16,573 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000002E96A89C940>,), {}. 
+2022-03-28 14:59:41,144 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:00:47,358 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:01:51,747 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:04:10,959 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:05:46,835 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:06:21,388 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:09:56,280 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:12:06,787 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:15:34,640 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test3',), {}. 
+2022-03-28 15:15:34,640 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001B546A2C940>,), {}. 
+2022-03-28 15:17:20,623 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:17:41,269 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-28 15:17:41,270 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001DAFCF2C940>,), {}. 
+2022-03-28 15:19:30,947 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:19:32,838 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-28 15:19:32,838 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x00000266CBBAC940>,), {}. 
+2022-03-28 15:21:30,438 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:22:07,280 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-28 15:22:07,280 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000002CDD898C940>,), {}. 
+2022-03-28 15:24:08,280 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:24:25,883 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 15:24:25,883 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x00000263D5F8C940>,), {}. 
+2022-03-28 15:26:24,574 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:26:33,742 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 15:26:33,742 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x0000020851E1C940>,), {}. 
+2022-03-28 15:39:50,500 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:39:58,218 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 15:39:58,218 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001F84AE7C940>,), {}. 
+2022-03-28 15:40:30,876 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:40:52,121 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 15:40:52,122 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x0000023E35A0C940>,), {}. 
+2022-03-28 15:42:01,184 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:42:02,785 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 15:42:02,785 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x00000197D138C940>,), {}. 
+2022-03-28 15:42:36,307 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:42:44,484 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 15:42:44,484 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000002669F80C940>,), {}. 
+2022-03-28 15:44:30,886 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-28 15:44:30,887 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x0000016ECABDC940>,), {}. 
+2022-03-28 15:45:46,761 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:45:53,678 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-28 15:45:53,678 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x0000010F9B0AC940>,), {}. 
+2022-03-28 15:51:48,457 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:52:00,634 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-28 15:52:00,634 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000002257D3DC940>,), {}. 
+2022-03-28 15:53:52,539 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:54:25,321 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-28 15:54:25,321 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001924811C940>,), {}. 
+2022-03-28 15:57:43,452 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:57:56,287 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-28 15:57:56,287 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x0000020508C2C940>,), {}. 
+2022-03-28 15:59:49,996 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 15:59:53,346 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-28 15:59:53,346 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x0000020B65F9C940>,), {}. 
+2022-03-28 16:02:28,372 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 16:02:37,744 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-28 16:02:37,744 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001C95541C940>,), {}. 
+2022-03-28 16:02:59,224 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 16:04:30,880 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 19:28:17,089 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 19:28:35,428 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 19:28:36,936 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 21:29:06,576 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 21:29:34,949 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 21:29:51,481 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 21:29:51,482 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x00000208046DC940>,), {}. 
+2022-03-28 21:30:25,808 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 21:30:40,776 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 21:30:40,776 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001D29A31C940>,), {}. 
+2022-03-28 21:31:18,267 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 21:34:02,156 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 21:34:14,730 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 21:34:14,730 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x00000189A064C940>,), {}. 
+2022-03-28 21:46:04,567 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 21:46:29,949 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 21:46:29,950 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x0000019A9E80C940>,), {}. 
+2022-03-28 21:47:27,957 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 21:47:31,463 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 21:47:31,463 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001477E72C940>,), {}. 
+2022-03-28 21:47:49,081 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-28 21:47:49,082 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001E22C1DC940>,), {}. 
+2022-03-28 22:09:28,170 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 22:10:29,007 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 22:11:11,818 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 22:11:20,650 - DEBUG - client               Была вызвана функция process_message_from_server c параметрами ({'response': 200},), {}. 
+2022-03-28 22:11:20,650 - ERROR - client               Функция process_message_from_server с параметрами ({'response': 200},), {} выполнена с ошибкой.
+2022-03-28 22:12:41,623 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 22:13:16,859 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 22:13:36,362 - DEBUG - client               Была вызвана функция process_message_from_server c параметрами ({'response': 200},), {}. 
+2022-03-28 22:13:51,109 - ERROR - client               Функция process_message_from_server с параметрами ({'response': 200},), {} выполнена с ошибкой.
+2022-03-28 22:15:51,714 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 22:15:51,714 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-28 22:20:17,630 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 22:27:33,126 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 22:31:47,816 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 22:32:29,028 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 22:33:15,244 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 22:33:57,041 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 22:34:02,280 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200},), {}. 
+2022-03-28 22:52:31,943 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 22:52:40,084 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 22:52:40,084 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001ACD252C970>,), {}. 
+2022-03-28 22:53:38,877 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 22:54:44,451 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 22:54:44,478 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-28 22:54:55,387 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 22:54:55,387 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x0000017D6B7CC970>,), {}. 
+2022-03-28 22:54:57,628 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-28 22:57:44,822 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 22:57:44,857 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-28 22:57:52,946 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 22:57:52,946 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x0000011CDBBFC970>,), {}. 
+2022-03-28 22:59:23,639 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 22:59:40,917 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-28 23:00:04,970 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 23:00:04,999 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-28 23:00:12,726 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 23:00:12,726 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x0000025D1D12C970>,), {}. 
+2022-03-28 23:00:14,809 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-28 23:00:49,936 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 23:01:00,494 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-28 23:01:12,950 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 23:01:12,950 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001D099F7C970>,), {}. 
+2022-03-28 23:01:22,856 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-28 23:02:26,196 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 23:02:26,255 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-28 23:02:33,383 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-28 23:02:33,383 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x0000026B59C0C970>,), {}. 
+2022-03-28 23:02:36,122 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-28 23:02:36,275 - DEBUG - client               Была вызвана функция process_response c параметрами ({'action': 'msg', 'time': 1648497756.1229339, 'account_name': 'test1', 'destination': 'test', 'message_text': 'eeee'},), {}. 
+2022-03-28 23:02:36,275 - ERROR - client               Функция process_response с параметрами ({'action': 'msg', 'time': 1648497756.1229339, 'account_name': 'test1', 'destination': 'test', 'message_text': 'eeee'},), {} выполнена с ошибкой.
+2022-03-28 23:10:55,646 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-28 23:10:55,702 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:12:29,776 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-29 01:12:29,835 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:12:29,835 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x000001FF36A00CA0>,), {}. 
+2022-03-29 01:12:29,835 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x000001FF36A00CA0>,), {}. 
+2022-03-29 01:13:30,530 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-29 01:13:30,559 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:13:30,559 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x000001B855760EE0>,), {}. 
+2022-03-29 01:13:30,560 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x000001B855760EE0>,), {}. 
+2022-03-29 01:13:37,687 - DEBUG - client               Была вызвана функция print_help c параметрами (), {}. 
+2022-03-29 01:13:47,242 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-29 01:13:47,549 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:13:47,549 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x00000224ABB50EE0>,), {}. 
+2022-03-29 01:13:47,549 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x00000224ABB50EE0>,), {}. 
+2022-03-29 01:13:49,866 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x00000224ABB50EE0>,), {}. 
+2022-03-29 01:14:09,086 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001B855760EE0>,), {}. 
+2022-03-29 01:16:39,528 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-29 01:16:39,619 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:16:39,619 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x000001CD1F500F70>,), {}. 
+2022-03-29 01:16:39,620 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x000001CD1F500F70>,), {}. 
+2022-03-29 01:16:46,712 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-29 01:16:47,398 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:16:47,398 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x000001E912380F70>,), {}. 
+2022-03-29 01:16:47,398 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x000001E912380F70>,), {}. 
+2022-03-29 01:16:57,386 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001E912380F70>,), {}. 
+2022-03-29 01:19:48,031 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-29 01:19:48,065 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:19:48,065 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x000002523E480F70>,), {}. 
+2022-03-29 01:19:48,066 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x000002523E480F70>,), {}. 
+2022-03-29 01:19:55,776 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-29 01:19:56,007 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:19:56,007 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x0000028472610F70>,), {}. 
+2022-03-29 01:19:56,008 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x0000028472610F70>,), {}. 
+2022-03-29 01:19:57,300 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x0000028472610F70>,), {}. 
+2022-03-29 01:24:23,235 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-29 01:24:23,558 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:24:23,559 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x00000263A4050F70>,), {}. 
+2022-03-29 01:24:23,559 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x00000263A4050F70>,), {}. 
+2022-03-29 01:25:24,864 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-29 01:25:25,066 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:25:25,066 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x0000017BDFD30F70>,), {}. 
+2022-03-29 01:25:25,067 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x0000017BDFD30F70>,), {}. 
+2022-03-29 01:27:16,322 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-29 01:27:16,556 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:27:16,556 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x0000022091F10F70>,), {}. 
+2022-03-29 01:27:16,557 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x0000022091F10F70>,), {}. 
+2022-03-29 01:28:40,455 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-29 01:28:40,711 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:28:40,712 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x0000018E89C10F70>,), {}. 
+2022-03-29 01:28:40,712 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x0000018E89C10F70>,), {}. 
+2022-03-29 01:30:06,691 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-29 01:30:06,932 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:30:06,932 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x00000208255B0F70>,), {}. 
+2022-03-29 01:30:06,932 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x00000208255B0F70>,), {}. 
+2022-03-29 01:31:25,251 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-29 01:31:25,485 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:31:25,485 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x000001DD29DE0F70>,), {}. 
+2022-03-29 01:31:25,486 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x000001DD29DE0F70>,), {}. 
+2022-03-29 01:31:28,039 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001DD29DE0F70>,), {}. 
+2022-03-29 01:32:12,325 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-03-29 01:32:12,597 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:32:12,597 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x000001AB00090F70>,), {}. 
+2022-03-29 01:32:12,598 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x000001AB00090F70>,), {}. 
+2022-03-29 01:32:21,155 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test1',), {}. 
+2022-03-29 01:32:21,396 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:32:21,396 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x000001690CB00F70>,), {}. 
+2022-03-29 01:32:21,396 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x000001690CB00F70>,), {}. 
+2022-03-29 01:32:24,574 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001690CB00F70>,), {}. 
+2022-03-29 01:32:53,828 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-29 01:32:54,334 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:32:54,334 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x0000024EE5640F70>,), {}. 
+2022-03-29 01:32:54,335 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x0000024EE5640F70>,), {}. 
+2022-03-29 01:32:56,511 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x0000024EE5640F70>,), {}. 
+2022-03-29 01:36:37,523 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test0',), {}. 
+2022-03-29 01:36:37,539 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test3',), {}. 
+2022-03-29 01:36:37,555 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test2',), {}. 
+2022-03-29 01:36:37,555 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test4',), {}. 
+2022-03-29 01:36:37,699 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:36:37,700 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x0000026AD2AAFA30>,), {}. 
+2022-03-29 01:36:37,700 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x0000026AD2AAFA30>,), {}. 
+2022-03-29 01:36:37,939 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:36:37,939 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x0000011098AAFA30>,), {}. 
+2022-03-29 01:36:37,940 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x0000011098AAFA30>,), {}. 
+2022-03-29 01:36:38,356 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:36:38,356 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x000001C65C96FA30>,), {}. 
+2022-03-29 01:36:38,357 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x000001C65C96FA30>,), {}. 
+2022-03-29 01:36:38,452 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:36:38,452 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x000001B7F16AFA30>,), {}. 
+2022-03-29 01:36:38,453 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x000001B7F16AFA30>,), {}. 
+2022-03-29 01:36:38,468 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'action': 'initial'},), {}. 
+2022-03-29 01:36:38,468 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x00000165874AFA30>,), {}. 
+2022-03-29 01:36:38,468 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x00000165874AFA30>,), {}. 
+2022-03-29 01:36:50,222 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x0000011098AAFA30>,), {}. 
