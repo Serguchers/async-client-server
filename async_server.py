@@ -1,30 +1,45 @@
-from base import Base
-import json
-from common.variables import ACTIONS, MAX_CONNECTIONS, DEFAULT_PORT, ENCODING
-from common.utils import convert_to_dict
 import argparse
 import asyncio
-from threading import Thread, Lock
+import json
+from threading import Lock, Thread
 
+from base import Base
+from common.utils import convert_to_dict
+from common.variables import ACTIONS, DEFAULT_PORT, ENCODING, MAX_CONNECTIONS
 
 CLIENTS = {}
 
 
-class Server(Base):
+class Server:
     def __init__(self, connection_port, connection_address):
-        super().__init__()
+        """
+        Server initalizator. Starts message processor and message sender subprocesses.
+        Args:
+            connection_port (int): connection port
+            connection_address (str): connection address
+        """        
         self.connection_port = connection_port
         self.connection_address = connection_address
-        self.message_processor = None
+        self.message_processor = MessageProcessor(self)
+        self.message_sender = MessageSender()
+        self.message_processor.start()
+        self.message_sender.start()
         
     async def run_server(self):
+        """
+        Main runner, starts serving clients.
+        """
         runner = await asyncio.start_server(self.process_client, self.connection_address, self.connection_port)
         await runner.serve_forever()
         
     async def process_client(self, reader, writer):
-        if self.message_processor is None:
-            self.message_processor = MessageProcessor(self)
-            self.message_processor.start()
+        """
+        Accepts data from client. 
+        Send client message to message processor.
+        Args:
+            reader : asycnio reader obj
+            writer : asyncio writer obj
+        """
         while True:
             try:
                 message = await self.process_client_message(reader)
@@ -37,9 +52,17 @@ class Server(Base):
                                                          'reader': reader,
                                                          'writer': writer})
 
-                
-    
+                  
     async def process_client_message(self, reader, delimiter=b'\n'):
+        """
+        Read client message.
+        Args:
+            reader : asycnio reader obj
+            delimiter (bytes, optional): stops reading at delimiter
+
+        Returns:
+            bytes: encoded message
+        """
         message = await reader.read(1000)
         return message
         
@@ -48,6 +71,11 @@ class Server(Base):
 
 class MessageProcessor(Thread):
     def __init__(self, server):
+        """
+        Processes messages. Message sorting with further transfer to MessageSender.
+        Args:
+            server (Server): server object
+        """
         super().__init__()
         self.daemon = True
         self.server = server
@@ -55,9 +83,6 @@ class MessageProcessor(Thread):
         self.message_sender = None
     
     def run(self):
-        if self.message_sender is None:
-            self.message_sender = MessageSender()
-            self.message_sender.start()
         while True:
             try:
                 data = self.message_queue.pop(0)
@@ -68,20 +93,25 @@ class MessageProcessor(Thread):
                 self.parse_message(data)
     
     def parse_message(self, data):
+        """
+        Check message action and message format.
+        Args:
+            data (dict): usefull data related to message
+        """
         message = data['message']
         if message["action"] == 'presence' and message["time"]:
             CLIENTS[message['user']['account_name']] = (data['reader'], data['writer'])
-            self.message_sender.messages_to_send.append({'response': 200, 
+            self.server.message_sender.messages_to_send.append({'response': 200, 
                                                          'destination': data['writer'], 
                                                          'action': 'initial'})
             return
 
         if message['action'] == 'msg' and message['time'] and message['account_name'] \
             and message['message_text'] and message['destination']:
-            self.message_sender.messages_to_send.append(message)
+            self.server.message_sender.messages_to_send.append(message)
             return 
 
-        self.message_sender.messages_to_send.append({"response": 400, 
+        self.server.message_sender.messages_to_send.append({"response": 400, 
                                                      "alert": "Wrong message format!",
                                                      'destination': data['writer'],
                                                      'action': 'error'})
@@ -90,6 +120,9 @@ class MessageProcessor(Thread):
 
 class MessageSender(Thread):
     def __init__(self):
+        """
+        Object responsible for sending message to destination.
+        """
         super().__init__()
         self.daemon = True
         self.messages_to_send = []
@@ -104,7 +137,13 @@ class MessageSender(Thread):
                 self.send_message(message)
         
     def send_message(self, message):
-        
+        """
+        If message is error or initial send back to owner.
+        If message is sent to someone, send to destination.
+
+        Args:
+            message (dict): data related to message
+        """
         
         if message['action'] == 'initial' or message['action'] == 'error':
             transport = message['destination'].get_extra_info('socket')
