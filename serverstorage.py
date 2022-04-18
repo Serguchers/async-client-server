@@ -36,10 +36,10 @@ class ServerStorage:
             self.contact = contact
             
     class UsersStatistics:
-        def __init__(self, user) -> None:
+        def __init__(self, user):
             self.id = None
             self.user = user
-            self.send = 0
+            self.sent = 0
             self.accepted = 0
     
     def __init__(self):
@@ -98,6 +98,9 @@ class ServerStorage:
             user = self.Users(username)
             self.session.add(user)
             self.session.commit()
+            user_statistics = self.UsersStatistics(user.id)
+            self.session.add(user_statistics)
+            self.session.commit()
         
         new_active_user = self.ActiveUsers(user.id, ip_address, port, datetime.datetime.now())
         self.session.add(new_active_user)
@@ -131,3 +134,12 @@ class ServerStorage:
             contact_check.delete()
             self.session.commit()
         return
+    
+    def write_statistics(self, username, action):
+        user = self.session.query(self.Users).filter_by(name=username).first()
+        user_stats = self.session.query(self.UsersStatistics).filter_by(user=user.id).first()
+        if action == 'accepted':
+            user_stats.accepted += 1
+        if action == 'sent':
+            user_stats.sent += 1
+        self.session.commit()

@@ -113,6 +113,8 @@ class MessageProcessor(Thread):
 
         elif message['action'] == 'msg' and message['time'] and message['account_name'] \
             and message['message_text'] and message['destination']:
+            self.storage.write_statistics(message['account_name'], 'sent')
+            self.storage.write_statistics(message['account_name'], 'accepted')
             self.server.message_sender.messages_to_send.append(message)
         
         elif message['action'] == 'add_contact' and message['account_name'] and message['destination']:
