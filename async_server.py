@@ -147,6 +147,17 @@ class MessageProcessor(Thread):
                                                                     'action': 'del_contact',
                                                                     'contact': message['destination'],
                                                                     'status': 'success'}) 
+        elif message['action'] == 'get_contacts' and message['account_name']:
+            try:
+                contacts = self.storage.get_users_contacts(message['account_name'])
+            except:
+                pass
+            else:
+                self.server.message_sender.messages_to_send.append({'response': 200,
+                                                                    'destination': message['account_name'],
+                                                                    'action': 'get_contacts',
+                                                                    'contacts': contacts,
+                                                                    'status': 'success'}) 
 
         else:
             self.server.message_sender.messages_to_send.append({"response": 400, 
@@ -219,6 +230,16 @@ class MessageSender(Thread):
         if message['action'] == 'del_contact':
             try:
                 transport = CLIENTS[message['sender']][1].get_extra_info('socket')
+            except:
+                return
+            
+            message = json.dumps(message).encode(ENCODING)
+            transport.send(message)
+            return
+
+        if message['action'] == 'get_contacts':
+            try:
+                transport = CLIENTS[message['destination']][1].get_extra_info('socket')
             except:
                 return
             

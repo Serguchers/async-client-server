@@ -1,4 +1,3 @@
-from enum import unique
 import sqlite3
 import sqlalchemy
 import datetime
@@ -143,3 +142,12 @@ class ServerStorage:
         if action == 'sent':
             user_stats.sent += 1
         self.session.commit()
+        
+    def get_users_contacts(self, username):
+        user = self.session.query(self.Users).filter_by(name=username).first()
+        user_contacts = self.session.query(self.UsersContacts.user,
+                                        self.Users.name).\
+                                        join(self.Users, self.UsersContacts.contact==self.Users.id).\
+                                        filter(self.UsersContacts.user==user.id)
+        user_contacts = [i[1] for i in user_contacts.all()]
+        return user_contacts

@@ -73,7 +73,15 @@ class Client:
         }
         return add_request
 
-
+    @log_deco(logger=log_client)
+    def get_contacts(self):
+        request  = {
+            'action': 'get_contacts',
+            'time': time(),
+            'account_name': self.username
+        }
+        return request
+    
     @log_deco(logger=log_client)
     def process_message_from_server(self):
         while True:
@@ -86,6 +94,9 @@ class Client:
                     print(f'Успешно добавлен контакт: {message["contact"]}')
                 elif message['action'] == 'del_contact' and message['status'] == 'success':
                     print(f'Успешно удален контакт: {message["contact"]}')
+                elif message['action'] == 'get_contacts' and message['status'] == 'success':
+                    contacts = ', '.join(message['contacts'])
+                    print(f'Список ваших контактов: {contacts}')
                 else:
                     print(f'Поступило некорректное сообщение с сервера: {message}')
             except:
@@ -105,13 +116,20 @@ class Client:
                 except:
                     print('Потеряно соединение с сервером.')
                     sys.exit(1)
-            elif action == 'contacts':
+            elif action == 'edit contacts':
                 request = self.change_contacts()
                 try:
                     send_message(self.connection, request)
                 except:
                     print('Потеряно соединение с сервером.')
                     sys.exit(1)
+            elif action =='get contacts':
+                request = self.get_contacts()
+                try:
+                    send_message(self.connection, request)
+                except:
+                    print('Потеряно соединение с сервером.')
+                    sys.exit(1)    
             elif action == 'help':
                 Client.print_help()
             elif action == 'exit':
