@@ -60,6 +60,19 @@ class Client:
         }
         return message_to_send
 
+    @log_deco(logger=log_client)
+    def change_contacts(self):
+        action = input('Введите add/del, чтобы добавить/удалить контак:')
+        to_user = input('Введите имя контакта: ')
+ 
+        add_request = {
+            'action': f'{action}_contact',
+            'time': time(),
+            'account_name': self.username,
+            'destination': to_user
+        }
+        return add_request
+
 
     @log_deco(logger=log_client)
     def process_message_from_server(self):
@@ -69,6 +82,10 @@ class Client:
                 message = convert_to_dict(message)
                 if message['action'] == 'msg' and message['message_text'] and message['account_name']:
                     print(f'Получено сообщение от {message["account_name"]}: {message["message_text"]}')
+                elif message['action'] == 'add_contact' and message['status'] == 'success':
+                    print(f'Успешно добавлен контакт: {message["contact"]}')
+                elif message['action'] == 'del_contact' and message['status'] == 'success':
+                    print(f'Успешно удален контакт: {message["contact"]}')
                 else:
                     print(f'Поступило некорректное сообщение с сервера: {message}')
             except:
@@ -85,6 +102,13 @@ class Client:
                 message = self.create_message()
                 try:
                     send_message(self.connection, message)
+                except:
+                    print('Потеряно соединение с сервером.')
+                    sys.exit(1)
+            elif action == 'contacts':
+                request = self.change_contacts()
+                try:
+                    send_message(self.connection, request)
                 except:
                     print('Потеряно соединение с сервером.')
                     sys.exit(1)

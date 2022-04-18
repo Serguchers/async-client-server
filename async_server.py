@@ -6,6 +6,7 @@ from threading import Lock, Thread
 from base import Base
 from common.utils import convert_to_dict
 from common.variables import ACTIONS, DEFAULT_PORT, ENCODING, MAX_CONNECTIONS
+from serverstorage import ServerStorage
 
 CLIENTS = {}
 
@@ -20,9 +21,10 @@ class Server:
         """        
         self.connection_port = connection_port
         self.connection_address = connection_address
+        self.server_storage = ServerStorage()
         self.message_processor = MessageProcessor(self)
-        self.message_sender = MessageSender()
         self.message_processor.start()
+        self.message_sender = MessageSender(self)
         self.message_sender.start()
         
     async def run_server(self):
@@ -79,6 +81,7 @@ class MessageProcessor(Thread):
         super().__init__()
         self.daemon = True
         self.server = server
+        self.storage = server.server_storage
         self.message_queue = []
         self.message_sender = None
     
@@ -101,30 +104,64 @@ class MessageProcessor(Thread):
         message = data['message']
         if message["action"] == 'presence' and message["time"]:
             CLIENTS[message['user']['account_name']] = (data['reader'], data['writer'])
-            self.server.message_sender.messages_to_send.append({'response': 200, 
-                                                         'destination': data['writer'], 
-                                                         'action': 'initial'})
-            return
+            self.server.message_sender.messages_to_send.append({'response': 200,
+                                                                'sender': message['user']['account_name'],
+                                                                'destination': data['writer'], 
+                                                                'action': 'initial'})
+            user_ip, user_port = data['writer'].get_extra_info('peername')
+            self.storage.login_user(message['user']['account_name'], user_ip, user_port)
 
-        if message['action'] == 'msg' and message['time'] and message['account_name'] \
+        elif message['action'] == 'msg' and message['time'] and message['account_name'] \
             and message['message_text'] and message['destination']:
             self.server.message_sender.messages_to_send.append(message)
-            return 
+        
+        elif message['action'] == 'add_contact' and message['account_name'] and message['destination']:
+            try:
+                self.storage.add_contact(message['account_name'], message['destination'])
+            except:
+                self.server.message_sender.messages_to_send.append({'response': 400,
+                                                                    'sender': message['account_name'],
+                                                                    'action': 'add_contact',
+                                                                    'contact': message['destination'],
+                                                                    'status': 'failed'})
+            else:
+               self.server.message_sender.messages_to_send.append({'response': 200,
+                                                                    'sender': message['account_name'],
+                                                                    'action': 'add_contact',
+                                                                    'contact': message['destination'],
+                                                                    'status': 'success'}) 
+        elif message['action'] == 'del_contact' and message['account_name'] and message['destination']:
+            try:
+                self.storage.del_contact(message['account_name'], message['destination'])
+            except:
+                self.server.message_sender.messages_to_send.append({'response': 400,
+                                                                    'sender': message['account_name'],
+                                                                    'action': 'del_contact',
+                                                                    'contact': message['destination'],
+                                                                    'status': 'failed'})
+            else:
+               self.server.message_sender.messages_to_send.append({'response': 200,
+                                                                    'sender': message['account_name'],
+                                                                    'action': 'del_contact',
+                                                                    'contact': message['destination'],
+                                                                    'status': 'success'}) 
 
-        self.server.message_sender.messages_to_send.append({"response": 400, 
-                                                     "alert": "Wrong message format!",
-                                                     'destination': data['writer'],
-                                                     'action': 'error'})
+        else:
+            self.server.message_sender.messages_to_send.append({"response": 400, 
+                                                                "alert": "Wrong message format!",
+                                                                'destination': data['writer'],
+                                                                'action': 'error'})
         return
         
 
 class MessageSender(Thread):
-    def __init__(self):
+    def __init__(self, server):
         """
         Object responsible for sending message to destination.
         """
         super().__init__()
         self.daemon = True
+        self.storage = server.server_storage
         self.messages_to_send = []
     
     def run(self):
@@ -153,12 +190,33 @@ class MessageSender(Thread):
             try:
                 transport.send(message)
             except:
+                self.storage.logout_user(message['sender'])
                 return
             return
         
         if message['action'] == 'msg':
             try:
                 transport = CLIENTS[message['destination']][1].get_extra_info('socket')
+            except:
+                return
+            
+            message = json.dumps(message).encode(ENCODING)
+            transport.send(message)
+            return
+        
+        if message['action'] == 'add_contact':
+            try:
+                transport = CLIENTS[message['sender']][1].get_extra_info('socket')
+            except:
+                return
+            
+            message = json.dumps(message).encode(ENCODING)
+            transport.send(message)
+            return
+        
+        if message['action'] == 'del_contact':
+            try:
+                transport = CLIENTS[message['sender']][1].get_extra_info('socket')
             except:
                 return
             
