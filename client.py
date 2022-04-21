@@ -1,4 +1,3 @@
-from base import Base
 from time import time
 from common.variables import ACCOUNT_NAME, MESSAGE_STATUS, DEFAULT_IP, DEFAULT_PORT, DEFAULT_CLIENT_MODE
 import sys

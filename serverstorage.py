@@ -41,8 +41,9 @@ class ServerStorage:
             self.sent = 0
             self.accepted = 0
     
-    def __init__(self):
-        self.database_engine = sqlalchemy.create_engine(SERVER_DATABASE, echo=False)
+    def __init__(self, path):
+        self.database_engine = sqlalchemy.create_engine(f'sqlite:///{path}', echo=False,
+                                                        connect_args={'check_same_thread': False})
         self.metadata = sqlalchemy.MetaData()
         
         users_table = sqlalchemy.Table('Users', self.metadata,
@@ -151,3 +152,22 @@ class ServerStorage:
                                         filter(self.UsersContacts.user==user.id)
         user_contacts = [i[1] for i in user_contacts.all()]
         return user_contacts
+    
+    def active_users_list(self):
+        active_users = self.session.query(self.Users.name,
+                                          self.ActiveUsers.ip_address,
+                                          self.ActiveUsers.port,
+                                          self.ActiveUsers.login_time
+                                          ).join(self.Users)
+        
+        return active_users.all()
+    
+    def message_history(self):
+        message_history = self.session.query(
+            self.Users.name,
+            self.Users.last_login,
+            self.UsersStatistics.sent,
+            self.UsersStatistics.accepted
+        ).join(self.Users)
+        
+        return message_history.all()
