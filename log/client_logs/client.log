@@ -841,3 +841,41 @@
 2022-04-18 23:12:18,366 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x000001E06F51C5B0>,), {}. 
 2022-04-18 23:12:18,366 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x000001E06F51C5B0>,), {}. 
 2022-04-18 23:12:20,304 - DEBUG - client               Была вызвана функция get_contacts c параметрами (<__main__.Client object at 0x000001E06F51C5B0>,), {}. 
+2022-04-21 14:24:40,297 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test_1',), {}. 
+2022-04-21 14:24:40,617 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'sender': 'test_1', 'action': 'initial'},), {}. 
+2022-04-21 14:24:40,617 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x000001BB14ABAF70>,), {}. 
+2022-04-21 14:24:40,617 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x000001BB14ABAF70>,), {}. 
+2022-04-21 14:24:49,437 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test_2',), {}. 
+2022-04-21 14:24:49,699 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'sender': 'test_2', 'action': 'initial'},), {}. 
+2022-04-21 14:24:49,700 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x000001840FF89F70>,), {}. 
+2022-04-21 14:24:49,700 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x000001840FF89F70>,), {}. 
+2022-04-21 14:24:54,034 - DEBUG - client               Была вызвана функция print_help c параметрами (), {}. 
+2022-04-21 14:25:01,476 - DEBUG - client               Была вызвана функция change_contacts c параметрами (<__main__.Client object at 0x000001BB14ABAF70>,), {}. 
+2022-04-21 14:27:13,398 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-04-21 14:27:14,089 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'sender': 'test', 'action': 'initial'},), {}. 
+2022-04-21 14:27:14,092 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x00000165009B97F0>,), {}. 
+2022-04-21 14:27:14,104 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x00000165009B97F0>,), {}. 
+2022-04-21 14:27:20,547 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test_2',), {}. 
+2022-04-21 14:27:21,041 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'sender': 'test_2', 'action': 'initial'},), {}. 
+2022-04-21 14:27:21,042 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x000002CD301B9F70>,), {}. 
+2022-04-21 14:27:21,042 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x000002CD301B9F70>,), {}. 
+2022-04-21 14:27:25,816 - DEBUG - client               Была вызвана функция print_help c параметрами (), {}. 
+2022-04-21 14:27:32,851 - DEBUG - client               Была вызвана функция change_contacts c параметрами (<__main__.Client object at 0x00000165009B97F0>,), {}. 
+2022-04-21 14:29:32,601 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-04-21 14:29:32,935 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'sender': 'test', 'action': 'initial'},), {}. 
+2022-04-21 14:29:32,966 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x0000028AA30BA7F0>,), {}. 
+2022-04-21 14:29:33,014 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x0000028AA30BA7F0>,), {}. 
+2022-04-21 14:29:37,785 - DEBUG - client               Была вызвана функция change_contacts c параметрами (<__main__.Client object at 0x0000028AA30BA7F0>,), {}. 
+2022-04-21 14:30:06,576 - DEBUG - client               Была вызвана функция change_contacts c параметрами (<__main__.Client object at 0x0000028AA30BA7F0>,), {}. 
+2022-04-21 14:30:42,017 - DEBUG - client               Была вызвана функция change_contacts c параметрами (<__main__.Client object at 0x0000028AA30BA7F0>,), {}. 
+2022-04-21 14:31:46,035 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-04-21 14:32:14,072 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test',), {}. 
+2022-04-21 14:32:14,282 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'sender': 'test', 'action': 'initial'},), {}. 
+2022-04-21 14:32:14,345 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x000001F9535468B0>,), {}. 
+2022-04-21 14:32:14,361 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x000001F9535468B0>,), {}. 
+2022-04-21 14:32:18,838 - DEBUG - client               Была вызвана функция presence_msg c параметрами ('test_2',), {}. 
+2022-04-21 14:32:19,234 - DEBUG - client               Была вызвана функция process_response c параметрами ({'response': 200, 'sender': 'test_2', 'action': 'initial'},), {}. 
+2022-04-21 14:32:19,235 - DEBUG - threading            Была вызвана функция process_message_from_server c параметрами (<__main__.Client object at 0x0000021C5CDF9F70>,), {}. 
+2022-04-21 14:32:19,235 - DEBUG - threading            Была вызвана функция users_interface c параметрами (<__main__.Client object at 0x0000021C5CDF9F70>,), {}. 
+2022-04-21 14:32:24,741 - DEBUG - client               Была вызвана функция change_contacts c параметрами (<__main__.Client object at 0x000001F9535468B0>,), {}. 
+2022-04-21 14:32:48,923 - DEBUG - client               Была вызвана функция create_message c параметрами (<__main__.Client object at 0x000001F9535468B0>,), {}. 

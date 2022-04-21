@@ -1,4 +1,3 @@
-from curses import echo
 import sqlalchemy
 import datetime
 from sqlalchemy.orm import mapper, sessionmaker
@@ -10,7 +9,7 @@ class ClientDatabase:
     class Contacts:
         def __init__(self, contact):
             self.id = None
-            self.contact = contact
+            self.username = contact
             
     class MessageHistory:
         def __init__(self, to_user, from_user, message):
@@ -56,6 +55,7 @@ class ClientDatabase:
     
     def del_contact(self, contact):
         self.session.query(self.Contacts).filter_by(username=contact).delete()
+        self.session.commit()
         
     def save_message_history(self, to_user, from_user, message):
         message = self.MessageHistory(to_user, from_user, message)
