@@ -1,7 +1,7 @@
 import json
 from common.variables import ENCODING
 import socket
-
+import os
 
 def convert_to_dict(message):
     if isinstance(message, bytes):
@@ -22,6 +22,11 @@ def send_message(destination:socket.socket, message):
     else:
         raise ValueError
    
+def suppress_qt_warnings():
+    os.environ["QT_DEVICE_PIXEL_RATIO"] = "0"
+    os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+    os.environ["QT_SCREEN_SCALE_FACTORS"] = "1"
+    os.environ["QT_SCALE_FACTOR"] = "1"
    
     
 if __name__ == '__main__':

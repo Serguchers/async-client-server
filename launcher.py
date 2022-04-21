@@ -9,7 +9,7 @@ while True:
         break
     elif action == 'start':
         processes.append(subprocess.Popen('python async_server.py', creationflags=subprocess.CREATE_NEW_CONSOLE))
-        for i in range(5):
+        for i in range(3):
             processes.append(subprocess.Popen(f'python client.py -n test{i}', creationflags=subprocess.CREATE_NEW_CONSOLE))
 
     elif action == 'kill':
