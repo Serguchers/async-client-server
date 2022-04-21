@@ -15,17 +15,17 @@ log_client = logging.getLogger('client_logger')
 
 class Client:
     def __init__(self, connection_address, connection_port, username):
-        self.connection_address = connection_address
-        self.connection_port = connection_port
         self.username = username
         self.database = ClientDatabase(self.username)
+        self.transport = None
 
-        self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server = (self.connection_address, self.connection_port)
-        self.connection.connect((server))
+        self.init_connection(connection_address, connection_port)
+        
+    def init_connection(self, connection_address, connection_port):
+         self.transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+         self.transport.connect((connection_address, connection_port))
         
     @staticmethod
-    @log_deco(logger=log_client)
     def presence_msg(account_name):
         message = {
             "action": "presence",
@@ -39,7 +39,6 @@ class Client:
         return message
     
     @staticmethod
-    @log_deco(logger=log_client)
     def process_response(response):
         if response['response'] == 200:
             return 'SUCCESS'
@@ -47,7 +46,6 @@ class Client:
             raise Exception
 
 
-    @log_deco(logger=log_client)
     def create_message(self):
         to_user = input('Введите имя получателя: ')
         message = input('Введите сообщение для отправки: ')
@@ -61,7 +59,6 @@ class Client:
         }
         return message_to_send
 
-    @log_deco(logger=log_client)
     def change_contacts(self):
         action = input('Введите add/del, чтобы добавить/удалить контак:')
         to_user = input('Введите имя контакта: ')
@@ -74,7 +71,6 @@ class Client:
         }
         return add_request
 
-    @log_deco(logger=log_client)
     def get_contacts(self):
         request  = {
             'action': 'get_contacts',
@@ -83,7 +79,6 @@ class Client:
         }
         return request
     
-    @log_deco(logger=log_client)
     def process_message_from_server(self):
         while True:
             try:
@@ -107,8 +102,6 @@ class Client:
                 break
             
     
-    
-    @log_deco(logger=log_client)
     def users_interface(self):
         while True:
             action = input('Введите команду:')
@@ -149,7 +142,6 @@ class Client:
         
     
     @staticmethod
-    @log_deco(logger=log_client)
     def print_help():
         """Функция выводящяя справку по использованию"""
         print('Поддерживаемые команды:')
