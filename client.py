@@ -9,6 +9,7 @@ from log.utils import log_deco
 import argparse
 from common.utils import send_message, convert_to_dict
 from threading import Thread
+from clientstorage import ClientDatabase
 log_client = logging.getLogger('client_logger')
 
 
@@ -18,6 +19,7 @@ class Client:
         self.connection_address = connection_address
         self.connection_port = connection_port
         self.username = username
+        self.database = ClientDatabase(self.username)
 
         self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server = (self.connection_address, self.connection_port)
@@ -90,6 +92,8 @@ class Client:
                 message = convert_to_dict(message)
                 if message['action'] == 'msg' and message['message_text'] and message['account_name']:
                     print(f'Получено сообщение от {message["account_name"]}: {message["message_text"]}')
+                    self.database.save_message_history(self.username, message["account_name"], message["message_text"])
+               
                 elif message['action'] == 'add_contact' and message['status'] == 'success':
                     print(f'Успешно добавлен контакт: {message["contact"]}')
                 elif message['action'] == 'del_contact' and message['status'] == 'success':
@@ -113,6 +117,7 @@ class Client:
                 message = self.create_message()
                 try:
                     send_message(self.connection, message)
+                    self.database.save_message_history(message['destination'], self.username, message["message_text"])
                 except:
                     print('Потеряно соединение с сервером.')
                     sys.exit(1)
@@ -120,6 +125,10 @@ class Client:
                 request = self.change_contacts()
                 try:
                     send_message(self.connection, request)
+                    if request['action'] == 'add_contact':
+                        self.database.add_contact(request['destination'])
+                    elif request['action'] == 'del_contact':
+                        self.database.del_contact(request['destination'])
                 except:
                     print('Потеряно соединение с сервером.')
                     sys.exit(1)
@@ -146,6 +155,8 @@ class Client:
         """Функция выводящяя справку по использованию"""
         print('Поддерживаемые команды:')
         print('message - отправить сообщение. Кому и текст будет запрошены отдельно.')
+        print('edit contacts - добавить/удалить контакт')
+        print('get contacts - получить список ваших контактов')
         print('help - вывести подсказки по командам')
         print('exit - выход из программы')
         
