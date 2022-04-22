@@ -87,10 +87,11 @@ class Client:
                 if message['action'] == 'msg' and message['message_text'] and message['account_name']:
                     print(f'Получено сообщение от {message["account_name"]}: {message["message_text"]}')
                     self.database.save_message_history(self.username, message["account_name"], message["message_text"])
-               
+                    self.database.meet_user(message['account_name'])   
                 elif message['action'] == 'add_contact' and message['status'] == 'success':
                     print(f'Успешно добавлен контакт: {message["contact"]}')
                     self.database.add_contact(message['contact'])
+                    self.database.meet_user(message['contact'])  
                 elif message['action'] == 'del_contact' and message['status'] == 'success':
                     print(f'Успешно удален контакт: {message["contact"]}')
                 elif message['action'] == 'get_contacts' and message['status'] == 'success':

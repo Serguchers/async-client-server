@@ -1,6 +1,7 @@
 import sqlalchemy
 import datetime
 from sqlalchemy.orm import mapper, sessionmaker
+from sqlalchemy import or_
 from common.variables import *
 
 
@@ -72,6 +73,14 @@ class ClientDatabase:
         message = self.MessageHistory(to_user, from_user, message)
         self.session.add(message)
         self.session.commit()
+        
+    def get_message_history(self, contact):
+        message_history = self.session.query(self.MessageHistory.to_user,
+                                             self.MessageHistory.from_user,
+                                             self.MessageHistory.date,
+                                             self.MessageHistory.message).\
+                                                 filter(or_(self.MessageHistory.to_user==contact, self.MessageHistory.from_user==contact))
+        return message_history.all()
         
     def get_contacts(self):
         return [contact[0] for contact in self.session.query(self.Contacts.username).all()]
