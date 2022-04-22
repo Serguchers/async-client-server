@@ -98,9 +98,7 @@ class Client:
                     print(f'Список ваших контактов: {contacts}')
                 elif message['action'] == 'message_user':
                     if message['status'] == 'success':
-                        print('Сообщение успешно доставлено')
-                        self.database.meet_user(message['traget_user'])
-                        
+                        self.database.meet_user(message['target_user'])    
                 else:
                     print(f'Поступило некорректное сообщение с сервера: {message}')
             except:

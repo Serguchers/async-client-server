@@ -52,6 +52,7 @@ class ClientDatabase:
         
         mapper(self.Contacts, contacts_table)
         mapper(self.MessageHistory, message_history_table)
+        mapper(self.KnownUsers, known_users_table)
         
         Session = sessionmaker(bind=self.database_engine)
         self.session = Session()
