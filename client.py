@@ -82,7 +82,7 @@ class Client:
     def process_message_from_server(self):
         while True:
             try:
-                message = self.connection.recv(1024)
+                message = self.transport.recv(1024)
                 message = convert_to_dict(message)
                 if message['action'] == 'msg' and message['message_text'] and message['account_name']:
                     print(f'Получено сообщение от {message["account_name"]}: {message["message_text"]}')
@@ -90,11 +90,17 @@ class Client:
                
                 elif message['action'] == 'add_contact' and message['status'] == 'success':
                     print(f'Успешно добавлен контакт: {message["contact"]}')
+                    self.database.add_contact(message['contact'])
                 elif message['action'] == 'del_contact' and message['status'] == 'success':
                     print(f'Успешно удален контакт: {message["contact"]}')
                 elif message['action'] == 'get_contacts' and message['status'] == 'success':
                     contacts = ', '.join(message['contacts'])
                     print(f'Список ваших контактов: {contacts}')
+                elif message['action'] == 'message_user':
+                    if message['status'] == 'success':
+                        print('Сообщение успешно доставлено')
+                        self.database.meet_user(message['traget_user'])
+                        
                 else:
                     print(f'Поступило некорректное сообщение с сервера: {message}')
             except:
@@ -108,7 +114,7 @@ class Client:
             if action == 'message':
                 message = self.create_message()
                 try:
-                    send_message(self.connection, message)
+                    send_message(self.transport, message)
                     self.database.save_message_history(message['destination'], self.username, message["message_text"])
                 except:
                     print('Потеряно соединение с сервером.')
@@ -116,7 +122,7 @@ class Client:
             elif action == 'edit contacts':
                 request = self.change_contacts()
                 try:
-                    send_message(self.connection, request)
+                    send_message(self.transport, request)
                     if request['action'] == 'add_contact':
                         self.database.add_contact(request['destination'])
                     elif request['action'] == 'del_contact':
@@ -127,7 +133,7 @@ class Client:
             elif action =='get contacts':
                 request = self.get_contacts()
                 try:
-                    send_message(self.connection, request)
+                    send_message(self.transport, request)
                 except:
                     print('Потеряно соединение с сервером.')
                     sys.exit(1)    
@@ -163,8 +169,8 @@ if __name__ == '__main__':
     
     client = Client(namespace.addr, namespace.port, namespace.name)
     try:
-        send_message(client.connection, client.presence_msg(client.username))
-        message = client.connection.recv(1024)
+        send_message(client.transport, client.presence_msg(client.username))
+        message = client.transport.recv(1024)
         message = convert_to_dict(message)
         client.process_response(message)
     except:

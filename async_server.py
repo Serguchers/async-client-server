@@ -6,7 +6,7 @@ import configparser
 import os
 
 from threading import Lock, Thread
-from common.utils import convert_to_dict, suppress_qt_warnings
+from common.utils import convert_to_dict, suppress_qt_warnings, send_message_server
 from common.variables import ACTIONS, DEFAULT_PORT, ENCODING, MAX_CONNECTIONS
 from serverstorage import ServerStorage
 from server_gui import MainWindow, HistoryWindow, ConfigWindow, gui_create_model, create_stat_model
@@ -118,7 +118,6 @@ class MessageProcessor(Thread):
             CLIENTS[message['user']['account_name']] = (data['reader'], data['writer'])
             self.server.message_sender.messages_to_send.append({'response': 200,
                                                                 'sender': message['user']['account_name'],
-                                                                'destination': data['writer'], 
                                                                 'action': 'initial'})
             user_ip, user_port = data['writer'].get_extra_info('peername')
             self.storage.login_user(message['user']['account_name'], user_ip, user_port)
@@ -209,56 +208,29 @@ class MessageSender(Thread):
         """
         
         if message['action'] == 'initial' or message['action'] == 'error':
-            transport = message['destination'].get_extra_info('socket')
-            del message['destination']
-            
-            message = json.dumps(message).encode(ENCODING)
-            try:
-                transport.send(message)
-            except:
-                self.storage.logout_user(message['sender'])
-                return
-            return
+            send_message_server(CLIENTS, message, 'sender')
         
         if message['action'] == 'msg':
             try:
-                transport = CLIENTS[message['destination']][1].get_extra_info('socket')
+                send_message_server(CLIENTS, message, 'destination')
             except:
-                return
-            
-            message = json.dumps(message).encode(ENCODING)
-            transport.send(message)
-            return
+                message = {'action': 'message_user','response': 400, 
+                           'destination': message['account_name'], 'status': 'failed'}
+                send_message_server(CLIENTS, message, 'destination')
+            else:
+                message = {'action': 'message_user', 'response': 200, 
+                            'destination': message['account_name'], 'target_user': message['destination'],
+                            'status': 'success'}
+                send_message_server(CLIENTS, message, 'destination')
         
         if message['action'] == 'add_contact':
-            try:
-                transport = CLIENTS[message['sender']][1].get_extra_info('socket')
-            except:
-                return
-            
-            message = json.dumps(message).encode(ENCODING)
-            transport.send(message)
-            return
+            send_message_server(CLIENTS, message, 'sender')
         
         if message['action'] == 'del_contact':
-            try:
-                transport = CLIENTS[message['sender']][1].get_extra_info('socket')
-            except:
-                return
-            
-            message = json.dumps(message).encode(ENCODING)
-            transport.send(message)
-            return
+            send_message_server(CLIENTS, message, 'sender')
 
         if message['action'] == 'get_contacts':
-            try:
-                transport = CLIENTS[message['destination']][1].get_extra_info('socket')
-            except:
-                return
-            
-            message = json.dumps(message).encode(ENCODING)
-            transport.send(message)
-            return
+            send_message_server(CLIENTS, message, 'destination')
         
         
         

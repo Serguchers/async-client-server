@@ -11,6 +11,11 @@ class ClientDatabase:
             self.id = None
             self.username = contact
             
+    class KnownUsers:
+        def __init__(self, contact):
+            self.id = None
+            self.username = contact
+            
     class MessageHistory:
         def __init__(self, to_user, from_user, message):
             self.id = None
@@ -26,6 +31,11 @@ class ClientDatabase:
         self.metadata = sqlalchemy.MetaData()
         
         contacts_table = sqlalchemy.Table('contacts', self.metadata,
+                                          sqlalchemy.Column('id', sqlalchemy.Integer, primary_key=True),
+                                          sqlalchemy.Column('username', sqlalchemy.String)
+                                          )
+        
+        known_users_table = sqlalchemy.Table('known_users', self.metadata,
                                           sqlalchemy.Column('id', sqlalchemy.Integer, primary_key=True),
                                           sqlalchemy.Column('username', sqlalchemy.String)
                                           )
@@ -61,3 +71,15 @@ class ClientDatabase:
         message = self.MessageHistory(to_user, from_user, message)
         self.session.add(message)
         self.session.commit()
+        
+    def get_contacts(self):
+        return [contact[0] for contact in self.session.query(self.Contacts.username).all()]
+    
+    def meet_user(self, contact):
+        if not self.session.query(self.KnownUsers).filter_by(username=contact).count():
+            met_user = self.KnownUsers(contact)
+            self.session.add(met_user)
+            self.session.commit()
+    
+    def get_known_users(self):
+        return [user[0] for user in self.session.query(self.KnownUsers.username).all()]

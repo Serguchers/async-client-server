@@ -21,6 +21,15 @@ def send_message(destination:socket.socket, message):
         destination.send(message_bytes)
     else:
         raise ValueError
+    
+def send_message_server(clients, message, key):
+    try:
+        transport = clients[message[key]][1].get_extra_info('socket')
+    except:
+        return
+    message = json.dumps(message).encode(ENCODING)
+    transport.send(message)
+    
    
 def suppress_qt_warnings():
     os.environ["QT_DEVICE_PIXEL_RATIO"] = "0"

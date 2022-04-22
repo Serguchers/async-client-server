@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>904</width>
-    <height>679</height>
+    <width>906</width>
+    <height>675</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>UI_Client</string>
@@ -23,63 +29,27 @@
    <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QListView" name="listView_2">
+   <widget class="QListView" name="chat_history">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>10</y>
+      <y>30</y>
       <width>651</width>
-      <height>541</height>
+      <height>521</height>
      </rect>
     </property>
    </widget>
-   <widget class="QListView" name="listView">
+   <widget class="QListView" name="chats_list">
     <property name="geometry">
      <rect>
       <x>670</x>
-      <y>10</y>
+      <y>30</y>
       <width>231</width>
-      <height>541</height>
+      <height>521</height>
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>670</x>
-      <y>560</y>
-      <width>111</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Добавить</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_2">
-    <property name="geometry">
-     <rect>
-      <x>790</x>
-      <y>560</y>
-      <width>111</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Удалить</string>
-    </property>
-   </widget>
-   <widget class="QTextEdit" name="textEdit">
+   <widget class="QTextEdit" name="msg_area">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -95,10 +65,10 @@
      </font>
     </property>
     <property name="placeholderText">
-     <string>Введите сообщение для отправки</string>
+     <string>Введите сообщение для отправки...</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="send_msg">
     <property name="geometry">
      <rect>
       <x>590</x>
@@ -111,6 +81,37 @@
      <string>Отправить</string>
     </property>
    </widget>
+   <widget class="QLabel" name="chat_label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>651</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Чат с пользователем</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="search_cont">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>560</y>
+      <width>231</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="placeholderText">
+     <string>Поиск....</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="enabled">
@@ -120,11 +121,11 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>904</width>
+     <width>906</width>
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu">
+   <widget class="QMenu" name="main_menu">
     <property name="title">
      <string>Файл</string>
     </property>
@@ -137,7 +138,7 @@
     <addaction name="action_2"/>
     <addaction name="action_3"/>
    </widget>
-   <addaction name="menu"/>
+   <addaction name="main_menu"/>
    <addaction name="menu_2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
