@@ -1,3 +1,5 @@
+from concurrent.futures import thread
+from pydoc import cli
 from time import time
 from common.variables import ACCOUNT_NAME, MESSAGE_STATUS, DEFAULT_IP, DEFAULT_PORT, DEFAULT_CLIENT_MODE
 import sys
@@ -20,26 +22,39 @@ class Client:
         self.transport = None
 
         self.init_connection(connection_address, connection_port)
+        self.MessageSender = MessageSender()
+        
+        self.MessageReciever = MessageReciever()
+        self.MessageReciever.setClient(self)
+        self.MessageReciever.start()
         
     def init_connection(self, connection_address, connection_port):
-         self.transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-         self.transport.connect((connection_address, connection_port))
-        
-    @staticmethod
-    def presence_msg(account_name):
+        self.transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.transport.connect((connection_address, connection_port))
+
+        try:
+            send_message(self.transport, self.presence_msg())
+            message = self.transport.recv(1024)
+            message = convert_to_dict(message)
+            self.process_response(message)
+        except:
+            print('Произошла ошибка при подключении')
+        else:
+            print('Успешное подключение')
+    
+    def presence_msg(self):
         message = {
             "action": "presence",
             "time": time(),
             "type": "status",
             "user": {
-                "account_name": account_name,
+                "account_name": self.username,
                 "status": MESSAGE_STATUS
             }
         }
         return message
     
-    @staticmethod
-    def process_response(response):
+    def process_response(self, response):
         if response['response'] == 200:
             return 'SUCCESS'
         elif response['response'] == 400:
@@ -79,34 +94,7 @@ class Client:
         }
         return request
     
-    def process_message_from_server(self):
-        while True:
-            try:
-                message = self.transport.recv(1024)
-                message = convert_to_dict(message)
-                if message['action'] == 'msg' and message['message_text'] and message['account_name']:
-                    print(f'Получено сообщение от {message["account_name"]}: {message["message_text"]}')
-                    self.database.save_message_history(self.username, message["account_name"], message["message_text"])
-                    self.database.meet_user(message['account_name'])   
-                elif message['action'] == 'add_contact' and message['status'] == 'success':
-                    print(f'Успешно добавлен контакт: {message["contact"]}')
-                    self.database.add_contact(message['contact'])
-                    self.database.meet_user(message['contact'])  
-                elif message['action'] == 'del_contact' and message['status'] == 'success':
-                    print(f'Успешно удален контакт: {message["contact"]}')
-                elif message['action'] == 'get_contacts' and message['status'] == 'success':
-                    contacts = ', '.join(message['contacts'])
-                    print(f'Список ваших контактов: {contacts}')
-                elif message['action'] == 'message_user':
-                    if message['status'] == 'success':
-                        self.database.meet_user(message['target_user'])    
-                else:
-                    print(f'Поступило некорректное сообщение с сервера: {message}')
-            except:
-                print('Произошла ошибка.')
-                break
-            
-    
+ 
     def users_interface(self):
         while True:
             action = input('Введите команду:')
@@ -144,7 +132,6 @@ class Client:
             elif action:
                 print('Неверная команда.')
             
-        
     
     @staticmethod
     def print_help():
@@ -156,7 +143,61 @@ class Client:
         print('help - вывести подсказки по командам')
         print('exit - выход из программы')
         
-
+class MessageReciever(Thread):
+    def __init__(self):
+        super().__init__()
+        self.daemon = True
+        self.client = None
+    
+    def setClient(self, client):
+        self.client = client
+        
+    def run(self):
+        while True:
+            try:
+                message = self.client.transport.recv(1024)
+                message = convert_to_dict(message)
+                if message['action'] == 'msg' and message['message_text'] and message['account_name']:
+                    print(f'Получено сообщение от {message["account_name"]}: {message["message_text"]}')
+                    self.client.database.save_message_history(self.client.username, message["account_name"], message["message_text"])
+                    self.client.database.meet_user(message['account_name'])   
+                elif message['action'] == 'add_contact' and message['status'] == 'success':
+                    print(f'Успешно добавлен контакт: {message["contact"]}')
+                    self.client.database.add_contact(message['contact'])
+                    self.client.database.meet_user(message['contact'])  
+                elif message['action'] == 'del_contact' and message['status'] == 'success':
+                    print(f'Успешно удален контакт: {message["contact"]}')
+                elif message['action'] == 'get_contacts' and message['status'] == 'success':
+                    contacts = ', '.join(message['contacts'])
+                    print(f'Список ваших контактов: {contacts}')
+                elif message['action'] == 'message_user':
+                    if message['status'] == 'success':
+                        self.client.database.meet_user(message['target_user'])    
+                else:
+                    print(f'Поступило некорректное сообщение с сервера: {message}')
+            except Exception as e:
+                print('Произошла ошибка.')
+                print(e)
+                break
+        
+class MessageSender(Thread):
+    def __init__(self):
+        super().__init__()
+        self.daemon = True
+        self.client = None
+        self.messages_to_send = []
+    
+    def setClient(self, client):
+        self.client = client
+    
+    def run(self):
+        while True:
+            try:
+                message = self.messages_to_send.pop(0)
+            except:
+                pass
+            else:
+                send_message(self.client.transport, message)
 
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser()
@@ -167,25 +208,12 @@ if __name__ == '__main__':
     print(namespace.addr, namespace.port, namespace.name)
     
     client = Client(namespace.addr, namespace.port, namespace.name)
-    try:
-        send_message(client.transport, client.presence_msg(client.username))
-        message = client.transport.recv(1024)
-        message = convert_to_dict(message)
-        client.process_response(message)
-    except:
-        print('Произошла ошибка при подключении.')
-        sys.exit(1)
-    else:
-        print('Успешное подключение.')
-        
-    message_receiver = Thread(target=client.process_message_from_server, daemon=True)
-    message_receiver.start()
     
     user_interface = Thread(target=client.users_interface, daemon=True)
     user_interface.start()
     
     while True:
-        if message_receiver.is_alive() and user_interface.is_alive():
+        if user_interface.is_alive():
             continue
         break
     
