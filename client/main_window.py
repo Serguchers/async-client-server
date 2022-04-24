@@ -13,7 +13,7 @@ from common.variables import *
 from PyQt5.QtWidgets import QMainWindow, qApp, QMessageBox, QApplication, QListView, QMenu, QAction, QTextEdit
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QBrush, QColor, QFont, QCursor
 from PyQt5.QtCore import pyqtSlot, QEvent, Qt, QObject, pyqtSignal
-from client_ui.main_client_window import Ui_UI_Client
+from client_ui.main_client_window import UI_Client
 from threading import Thread, Lock
 from PyQt5 import QtCore
 import socket
@@ -32,7 +32,7 @@ class ClientMainWindow(QMainWindow):
         
         self.client = client
         
-        self.ui = Ui_UI_Client()
+        self.ui = UI_Client()
         self.ui.setupUi(self)
         self.contacts_switch_button = QAction('Контакты', self)
         self.ui.menubar.addAction(self.contacts_switch_button)

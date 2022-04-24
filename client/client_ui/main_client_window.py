@@ -11,7 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_UI_Client(object):
+class UI_Client(object):
     def setupUi(self, UI_Client):
         UI_Client.setObjectName("UI_Client")
         UI_Client.resize(906, 675)
