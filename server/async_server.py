@@ -175,6 +175,19 @@ class MessageProcessor(Thread):
         elif message['action'] == 'exit' and message['account_name']:
             self.storage.logout_user(message['account_name'])
             new_active_user = True
+        
+        elif message['action'] == 'search' and message['account_name'] and message['target_user']:
+            try:
+                filtered_users = self.storage.filter_users(message['target_user'])
+                print(filtered_users)
+            except:
+                pass
+            else:
+               self.server.message_sender.messages_to_send.append({'response': 200,
+                                                                    'destination': message['account_name'],
+                                                                    'action': 'search',
+                                                                    'result': filtered_users,
+                                                                    'status': 'success'}) 
 
         else:
             self.server.message_sender.messages_to_send.append({"response": 400, 
@@ -235,6 +248,9 @@ class MessageSender(Thread):
             send_message_server(CLIENTS, message, 'sender')
 
         if message['action'] == 'get_contacts':
+            send_message_server(CLIENTS, message, 'destination')
+            
+        if message['action'] == 'search':
             send_message_server(CLIENTS, message, 'destination')
         
         

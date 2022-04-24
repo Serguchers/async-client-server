@@ -10,7 +10,7 @@ import logging
 import argparse
 
 from common.variables import *
-from PyQt5.QtWidgets import QMainWindow, qApp, QMessageBox, QApplication, QListView, QMenu, QAction
+from PyQt5.QtWidgets import QMainWindow, qApp, QMessageBox, QApplication, QListView, QMenu, QAction, QTextEdit
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QBrush, QColor, QFont, QCursor
 from PyQt5.QtCore import pyqtSlot, QEvent, Qt, QObject, pyqtSignal
 from client_ui.main_client_window import Ui_UI_Client
@@ -34,6 +34,8 @@ class ClientMainWindow(QMainWindow):
         
         self.ui = Ui_UI_Client()
         self.ui.setupUi(self)
+        self.contacts_switch_button = QAction('Контакты', self)
+        self.ui.menubar.addAction(self.contacts_switch_button)
         
         # Exit button
         self.ui.action.triggered.connect(self.closeEvent)
@@ -45,6 +47,9 @@ class ClientMainWindow(QMainWindow):
         self.ui.send_msg.clicked.connect(self.send_message)
         self.ui.msg_area.installEventFilter(self)
         
+        # Search users
+        self.ui.search_cont.installEventFilter(self)
+        
         # Message history model
         self.message_history_model = QStandardItemModel()
         self.ui.chat_history.setModel(self.message_history_model)
@@ -55,14 +60,16 @@ class ClientMainWindow(QMainWindow):
         self.known_users = None
         self.contacts = None
         
+        # Switch to contacts panel
+        self.contacts_switch_button.triggered.connect(self.known_users_update)
+        
         #Connection
         client.new_message.connect(self.message)
         
         self.ui.chats_list.installEventFilter(self)
         
+        # Prevent exit by pressing X
         self.setWindowFlags(QtCore.Qt.Window | QtCore.Qt.CustomizeWindowHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowMinimizeButtonHint)
-    
-        
         self.known_users_update()
         self.show()
     
@@ -134,10 +141,16 @@ class ClientMainWindow(QMainWindow):
     def message(self, message):
         log_client.info('Слот отработал')
         if message['action'] == 'msg':
-            self.current_chat = message['account_name']
             self.client.database.save_message_history(self.client.username, message["account_name"], message["message_text"])
             self.client.database.meet_user(message['account_name'])  
             self.known_users_update()
+            
+            for idx in range(self.ui.chats_list.model().rowCount()):
+                if message['account_name'] == self.ui.chats_list.model().item(idx).text():
+                    self.ui.chats_list.model().item(idx).setText(f'{self.ui.chats_list.model().item(idx).text()} *')
+            
+            if self.current_chat == message['account_name']:
+                self.message_history_update()
             
             if self.current_chat == message['account_name']:
                 self.message_history_update()
@@ -151,6 +164,9 @@ class ClientMainWindow(QMainWindow):
             self.client.database.del_contact(message['contact'])
             
             self.known_users_update(update_req=False)
+            
+        if message['action'] == 'search':
+            self.search_result(message['result'])
             
            
     # Send message - press Enter
@@ -173,6 +189,12 @@ class ClientMainWindow(QMainWindow):
                 del_contact_action.triggered.connect(self.del_contact)
                 
                 contact_context_menu.popup(event.globalPos())
+        
+        if event.type() == QEvent.KeyPress and obj is self.ui.search_cont and\
+            self.ui.search_cont.displayText():
+            if event.key() == Qt.Key.Key_Return and self.ui.search_cont.hasFocus():
+                self.client.find_user(self.ui.search_cont.displayText())
+                self.ui.search_cont.clear()
                      
         return super().eventFilter(obj, event)
     
@@ -206,3 +228,8 @@ class ClientMainWindow(QMainWindow):
             qApp.exit()
         else:
             pass
+        
+    def search_result(self, result):
+        self.contact_model.clear()
+        for i in result:
+            self.contact_list_item(i)

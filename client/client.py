@@ -124,42 +124,15 @@ class Client(QObject):
         self.MessageSender.messages_to_send.append(request)
         return request
  
-    def users_interface(self):
-        while True:
-            action = input('Введите команду:')
-            if action == 'message':
-                message = self.create_message()
-                try:
-                    self.database.save_message_history(message['destination'], self.username, message["message_text"])
-                except Exception as e:
-                    print('Потеряно соединение с сервером.')
-                    print(e)
-                    sys.exit(1)
-            elif action == 'edit contacts':
-                request = self.change_contacts()
-                try:
-                    send_message(self.transport, request)
-                    if request['action'] == 'add_contact':
-                        self.database.add_contact(request['destination'])
-                    elif request['action'] == 'del_contact':
-                        self.database.del_contact(request['destination'])
-                except:
-                    print('Потеряно соединение с сервером.')
-                    sys.exit(1)
-            elif action =='get contacts':
-                request = self.get_contacts()
-                try:
-                    send_message(self.transport, request)
-                except:
-                    print('Потеряно соединение с сервером.')
-                    sys.exit(1)    
-            elif action == 'help':
-                Client.print_help()
-            elif action == 'exit':
-                print('Завершение работы.')
-                break
-            elif action:
-                print('Неверная команда.')
+    def find_user(self, username):
+        request = {
+            'action': 'search',
+            'time': time(),
+            'account_name': self.username,
+            'target_user': username
+        }
+        self.MessageSender.messages_to_send.append(request)
+        return request
             
     
     @staticmethod
@@ -208,6 +181,10 @@ class MessageReciever(Thread):
                 elif message['action'] == 'message_user':
                     if message['status'] == 'success':
                         self.client.database.meet_user(message['target_user'])    
+                elif message['action'] == 'search':
+                    print(f'Поиск удался {message["result"]}')
+                    self.client.new_message.emit(message)
+                
                 else:
                     print(f'Поступило некорректное сообщение с сервера: {message}')
             except Exception:

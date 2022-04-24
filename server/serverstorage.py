@@ -166,6 +166,10 @@ class ServerStorage:
         
         return active_users.all()
     
+    def filter_users(self, username):
+        all_users = self.session.query(self.Users.name).filter(self.Users.name.contains(username)).all()
+        return [i[0] for i in all_users]
+    
     def message_history(self):
         message_history = self.session.query(
             self.Users.name,
