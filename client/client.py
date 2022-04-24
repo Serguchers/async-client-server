@@ -133,17 +133,7 @@ class Client(QObject):
         }
         self.MessageSender.messages_to_send.append(request)
         return request
-            
     
-    @staticmethod
-    def print_help():
-        """Функция выводящяя справку по использованию"""
-        print('Поддерживаемые команды:')
-        print('message - отправить сообщение. Кому и текст будет запрошены отдельно.')
-        print('edit contacts - добавить/удалить контакт')
-        print('get contacts - получить список ваших контактов')
-        print('help - вывести подсказки по командам')
-        print('exit - выход из программы')
         
 class MessageReciever(Thread):
     def __init__(self):
