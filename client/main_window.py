@@ -1,3 +1,6 @@
+from distutils.log import log
+from msilib.schema import SelfReg
+from re import I
 import sys
 import os
 sys.path.append(os.getcwd())
@@ -7,11 +10,12 @@ import logging
 import argparse
 
 from common.variables import *
-from PyQt5.QtWidgets import QMainWindow, qApp, QMessageBox, QApplication, QListView
-from PyQt5.QtGui import QStandardItemModel, QStandardItem, QBrush, QColor, QFont
+from PyQt5.QtWidgets import QMainWindow, qApp, QMessageBox, QApplication, QListView, QMenu, QAction
+from PyQt5.QtGui import QStandardItemModel, QStandardItem, QBrush, QColor, QFont, QCursor
 from PyQt5.QtCore import pyqtSlot, QEvent, Qt, QObject, pyqtSignal
 from client_ui.main_client_window import Ui_UI_Client
 from threading import Thread, Lock
+from PyQt5 import QtCore
 import socket
 from common.utils import *
 from time import time
@@ -32,7 +36,7 @@ class ClientMainWindow(QMainWindow):
         self.ui.setupUi(self)
         
         # Exit button
-        self.ui.action.triggered.connect(qApp.exit)
+        self.ui.action.triggered.connect(self.closeEvent)
         
         # Select chat
         self.ui.chats_list.doubleClicked.connect(self.select_chat)
@@ -44,12 +48,20 @@ class ClientMainWindow(QMainWindow):
         # Message history model
         self.message_history_model = QStandardItemModel()
         self.ui.chat_history.setModel(self.message_history_model)
+    
         
         # Variables
         self.current_chat = None
+        self.known_users = None
+        self.contacts = None
         
         #Connection
         client.new_message.connect(self.message)
+        
+        self.ui.chats_list.installEventFilter(self)
+        
+        self.setWindowFlags(QtCore.Qt.Window | QtCore.Qt.CustomizeWindowHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowMinimizeButtonHint)
+    
         
         self.known_users_update()
         self.show()
@@ -58,7 +70,7 @@ class ClientMainWindow(QMainWindow):
     def select_chat(self):
         self.current_chat = self.ui.chats_list.currentIndex().data()
         self.message_history_update()
-        self.known_users_update()
+        self.known_users_update(update_req=False)
     
     # Message history
     def message_history_update(self):
@@ -80,24 +92,28 @@ class ClientMainWindow(QMainWindow):
                 message.setTextAlignment(Qt.AlignRight)
                 self.message_history_model.appendRow(message)
             
-        log_client.info(message_list)
+        self.ui.chat_history.scrollToBottom()
         
     # List of users we are familiar with
-    def known_users_update(self):
-        known_users = self.client.database.get_known_users()
+    def known_users_update(self, update_req=True):
+        self.known_users = self.client.database.get_known_users()
+        self.contacts = self.client.database.get_contacts()
         self.contact_model = QStandardItemModel()
-        for i in known_users:
+
+        for i in self.contacts:
             if i == self.current_chat:
-                item = QStandardItem(i)
-                font = QFont()
-                font.setBold(True)
-                item.setFont(font)
-                item.setEditable(False)
-                self.contact_model.appendRow(item)
+                self.contact_list_item(i, bold=True, contact=True)
                 continue
-            item = QStandardItem(i)
-            item.setEditable(False)
-            self.contact_model.appendRow(item)
+            self.contact_list_item(i, contact=True)
+        for i in self.known_users:
+            if i in self.contacts:
+                continue
+            else:
+                if i == self.current_chat:
+                    self.contact_list_item(i, bold=True)
+                    continue
+                self.contact_list_item(i)
+    
         self.ui.chats_list.setModel(self.contact_model)
     
     # Send message to user
@@ -114,15 +130,79 @@ class ClientMainWindow(QMainWindow):
             self.message_history_update()
        
     # Handle message from user 
-    @pyqtSlot(str)
-    def message(self, sender):
+    @pyqtSlot(dict)
+    def message(self, message):
         log_client.info('Слот отработал')
-        if sender == self.current_chat:
-           self.message_history_update()
+        if message['action'] == 'msg':
+            self.current_chat = message['account_name']
+            self.client.database.save_message_history(self.client.username, message["account_name"], message["message_text"])
+            self.client.database.meet_user(message['account_name'])  
+            self.known_users_update()
+            
+            if self.current_chat == message['account_name']:
+                self.message_history_update()
+        if message['action'] == 'add_contact' and message['status'] == 'success':
+            self.client.database.add_contact(message['contact'])
+            self.client.database.meet_user(message['contact']) 
+            
+            self.known_users_update(update_req=False)
+            
+        if message['action'] == 'del_contact' and message['status'] == 'success':
+            self.client.database.del_contact(message['contact'])
+            
+            self.known_users_update(update_req=False)
+            
            
     # Send message - press Enter
     def eventFilter(self, obj: 'QObject', event: 'QEvent'):
         if event.type() == QEvent.KeyPress and obj is self.ui.msg_area:
             if event.key() == Qt.Key.Key_Return and self.ui.msg_area.hasFocus():
                 self.send_message()
+                
+        if event.type() == QEvent.ContextMenu and self.ui.chats_list.currentIndex() \
+            and obj.indexAt(event.pos()).isValid():
+                global contact_context_menu
+                contact_context_menu = QMenu(self)
+                add_contact_action = QAction('Добавить в контакты', self)
+                del_contact_action = QAction('Удалить из контактов', self)
+                
+                contact_context_menu.addAction(add_contact_action)
+                contact_context_menu.addAction(del_contact_action)
+                
+                add_contact_action.triggered.connect(self.add_contact)
+                del_contact_action.triggered.connect(self.del_contact)
+                
+                contact_context_menu.popup(event.globalPos())
+                     
         return super().eventFilter(obj, event)
+    
+    def add_contact(self):
+        self.client.add_contact(self.ui.chats_list.currentIndex().data())
+        
+    def del_contact(self):
+        self.client.del_contact(self.ui.chats_list.currentIndex().data())
+    
+    # List item creator
+    def contact_list_item(self, item, bold=False, contact=False):
+        item = QStandardItem(item)
+        font = QFont('Segoe UI', 11)
+        if contact:
+            font.setItalic(True)
+        font.setBold(bold)
+        item.setFont(font)
+        item.setEditable(False)
+        self.contact_model.appendRow(item)
+     
+    # App close handler   
+    def closeEvent(self, event):
+        close = QMessageBox()
+        close.setText('Вы хотите закрыть приложение?')
+        close.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
+        close = close.exec()
+        
+        if close == QMessageBox.Yes:
+            self.client.exit_message()
+            print('message sent')
+            qApp.exit()
+        else:
+            pass

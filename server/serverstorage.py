@@ -116,7 +116,7 @@ class ServerStorage:
     
     def logout_user(self, username):
         user = self.session.query(self.Users).filter_by(name=username).first()
-        self.session.query(self.ActiveUsers).flter_by(user=user.id).delete()
+        self.session.query(self.ActiveUsers).filter_by(user=user.id).delete()
         
         self.session.commit()
         

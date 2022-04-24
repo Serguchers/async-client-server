@@ -24,7 +24,7 @@ log_client = logging.getLogger('client_logger')
 
 class Client(QObject):
     
-    new_message = pyqtSignal(str)
+    new_message = pyqtSignal(dict)
     
     def __init__(self, connection_address, connection_port, username):
         super().__init__()
@@ -87,17 +87,25 @@ class Client(QObject):
         self.MessageSender.messages_to_send.append(message_to_send)
         return message_to_send
 
-    def change_contacts(self):
-        action = input('Введите add/del, чтобы добавить/удалить контак:')
-        to_user = input('Введите имя контакта: ')
- 
+    def add_contact(self, contact):
         add_request = {
-            'action': f'{action}_contact',
+            'action': 'add_contact',
             'time': time(),
             'account_name': self.username,
-            'destination': to_user
+            'destination': contact
         }
+        self.MessageSender.messages_to_send.append(add_request)
         return add_request
+    
+    def del_contact(self, contact):
+        del_request = {
+            'action': 'del_contact',
+            'time': time(),
+            'account_name': self.username,
+            'destination': contact
+        }
+        self.MessageSender.messages_to_send.append(del_request)
+        return del_request
 
     def get_contacts(self):
         request  = {
@@ -107,6 +115,14 @@ class Client(QObject):
         }
         return request
     
+    def exit_message(self):
+        request = {
+            'action': 'exit',
+            'time': time(),
+            'account_name': self.username
+        }
+        self.MessageSender.messages_to_send.append(request)
+        return request
  
     def users_interface(self):
         while True:
@@ -174,20 +190,17 @@ class MessageReciever(Thread):
                 if message['action'] == 'msg' and message['message_text'] and message['account_name']:
                     print(f'Получено сообщение от {message["account_name"]}: {message["message_text"]}')
 
-                    self.client.new_message.emit(message['account_name'])
-                    
-                    self.client.database.save_message_history(self.client.username, message["account_name"], message["message_text"])
-                    self.client.database.meet_user(message['account_name'])   
+                    self.client.new_message.emit(message) 
 
                 elif message['action'] == 'add_contact' and message['status'] == 'success':
                     print(f'Успешно добавлен контакт: {message["contact"]}')
                     
-                    self.client.database.add_contact(message['contact'])
-                    self.client.database.meet_user(message['contact'])  
+                    self.client.new_message.emit(message) 
+                    
                 elif message['action'] == 'del_contact' and message['status'] == 'success':
                     print(f'Успешно удален контакт: {message["contact"]}')
                     
-                    self.client.database.del_contact(message['contact'])
+                    self.client.new_message.emit(message) 
                     
                 elif message['action'] == 'get_contacts' and message['status'] == 'success':
                     contacts = ', '.join(message['contacts'])
@@ -219,6 +232,7 @@ class MessageSender(Thread):
             except:
                 pass
             else:
+                print(message)
                 send_message(self.client.transport, message)
 
 

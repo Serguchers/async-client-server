@@ -172,6 +172,9 @@ class MessageProcessor(Thread):
                                                                     'action': 'get_contacts',
                                                                     'contacts': contacts,
                                                                     'status': 'success'}) 
+        elif message['action'] == 'exit' and message['account_name']:
+            self.storage.logout_user(message['account_name'])
+            new_active_user = True
 
         else:
             self.server.message_sender.messages_to_send.append({"response": 400, 
