@@ -4,7 +4,7 @@ DEFAULT_CLIENT_MODE = 'listen'
 MAX_CONNECTIONS = 5
 MAX_PACKAGE_LENGTH = 1024
 ENCODING = 'utf-8'
-SERVER_DATABASE = 'sqlite:///server_base.db3'
+SERVER_DATABASE = 'sqlite:///server/server_base.db3'
 
 MESSAGE_STATUS = "Doing my homework!"
 ACCOUNT_NAME = 'Sergei'

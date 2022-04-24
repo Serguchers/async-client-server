@@ -4,12 +4,13 @@ import json
 import sys
 import configparser
 import os
+sys.path.append(os.getcwd())
 
 from threading import Lock, Thread
 from common.utils import convert_to_dict, suppress_qt_warnings, send_message_server
 from common.variables import ACTIONS, DEFAULT_PORT, ENCODING, MAX_CONNECTIONS
-from serverstorage import ServerStorage
-from server_gui import MainWindow, HistoryWindow, ConfigWindow, gui_create_model, create_stat_model
+from server.serverstorage import ServerStorage
+from server.server_gui import MainWindow, HistoryWindow, ConfigWindow, gui_create_model, create_stat_model
 from PyQt5.QtWidgets import QApplication, QMessageBox
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QStandardItemModel, QStandardItem

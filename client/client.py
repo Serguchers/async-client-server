@@ -1,6 +1,9 @@
 from concurrent.futures import thread
 from pydoc import cli
 from time import time
+from tkinter import E
+
+import PyQt5
 from common.variables import ACCOUNT_NAME, MESSAGE_STATUS, DEFAULT_IP, DEFAULT_PORT, DEFAULT_CLIENT_MODE
 import sys
 import socket
@@ -11,18 +14,27 @@ import argparse
 from common.utils import send_message, convert_to_dict
 from threading import Thread
 from clientstorage import ClientDatabase
+from PyQt5.QtCore import pyqtSignal, QObject
+
 log_client = logging.getLogger('client_logger')
 
 
 
-class Client:
+class Client(QObject):
+    
+    new_message = pyqtSignal(str)
+    
     def __init__(self, connection_address, connection_port, username):
+        super().__init__()
         self.username = username
         self.database = ClientDatabase(self.username)
         self.transport = None
 
         self.init_connection(connection_address, connection_port)
+        
         self.MessageSender = MessageSender()
+        self.MessageSender.setClient(self)
+        self.MessageSender.start()
         
         self.MessageReciever = MessageReciever()
         self.MessageReciever.setClient(self)
@@ -61,17 +73,16 @@ class Client:
             raise Exception
 
 
-    def create_message(self):
-        to_user = input('Введите имя получателя: ')
-        message = input('Введите сообщение для отправки: ')
- 
+    def create_message(self, to_user, message_text):
         message_to_send = {
             'action': 'msg',
             'time': time(),
             'account_name': self.username,
             'destination': to_user,
-            'message_text': message
+            'message_text': message_text
         }
+        
+        self.MessageSender.messages_to_send.append(message_to_send)
         return message_to_send
 
     def change_contacts(self):
@@ -101,10 +112,10 @@ class Client:
             if action == 'message':
                 message = self.create_message()
                 try:
-                    send_message(self.transport, message)
                     self.database.save_message_history(message['destination'], self.username, message["message_text"])
-                except:
+                except Exception as e:
                     print('Потеряно соединение с сервером.')
+                    print(e)
                     sys.exit(1)
             elif action == 'edit contacts':
                 request = self.change_contacts()
@@ -159,8 +170,11 @@ class MessageReciever(Thread):
                 message = convert_to_dict(message)
                 if message['action'] == 'msg' and message['message_text'] and message['account_name']:
                     print(f'Получено сообщение от {message["account_name"]}: {message["message_text"]}')
+
+                    self.client.new_message.emit(message['account_name'])
                     self.client.database.save_message_history(self.client.username, message["account_name"], message["message_text"])
                     self.client.database.meet_user(message['account_name'])   
+
                 elif message['action'] == 'add_contact' and message['status'] == 'success':
                     print(f'Успешно добавлен контакт: {message["contact"]}')
                     self.client.database.add_contact(message['contact'])
@@ -175,10 +189,10 @@ class MessageReciever(Thread):
                         self.client.database.meet_user(message['target_user'])    
                 else:
                     print(f'Поступило некорректное сообщение с сервера: {message}')
-            except Exception as e:
+            except Exception:
                 print('Произошла ошибка.')
-                print(e)
                 break
+      
         
 class MessageSender(Thread):
     def __init__(self):
@@ -198,6 +212,8 @@ class MessageSender(Thread):
                 pass
             else:
                 send_message(self.client.transport, message)
+
+
 
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser()

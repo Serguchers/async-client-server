@@ -1,6 +1,10 @@
 import sqlite3
 import sqlalchemy
 import datetime
+import sys
+import os
+sys.path.append(os.getcwd())
+
 from sqlalchemy.orm import mapper, sessionmaker
 from common.variables import SERVER_DATABASE
 

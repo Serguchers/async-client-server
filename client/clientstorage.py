@@ -27,7 +27,7 @@ class ClientDatabase:
             
     
     def __init__(self, name):
-        self.database_engine = sqlalchemy.create_engine(f'sqlite:///client_{name}.db3', echo=False,
+        self.database_engine = sqlalchemy.create_engine(f'sqlite:///databases/client_{name}.db3', echo=False, pool_recycle=7200,
                                                         connect_args={'check_same_thread': False})
         self.metadata = sqlalchemy.MetaData()
         
@@ -72,16 +72,16 @@ class ClientDatabase:
     def save_message_history(self, to_user, from_user, message):
         message = self.MessageHistory(to_user, from_user, message)
         self.session.add(message)
-        self.session.commit()
         
     def get_message_history(self, contact):
         message_history = self.session.query(self.MessageHistory.to_user,
                                              self.MessageHistory.from_user,
                                              self.MessageHistory.date,
                                              self.MessageHistory.message).\
-                                                 filter(or_(self.MessageHistory.to_user==contact, self.MessageHistory.from_user==contact))
-        return message_history.all()
-        
+                                                 filter(or_(self.MessageHistory.to_user==contact, self.MessageHistory.from_user==contact)).all()
+        self.session.commit()
+        return message_history
+    
     def get_contacts(self):
         return [contact[0] for contact in self.session.query(self.Contacts.username).all()]
     
