@@ -1,3 +1,8 @@
+import os
+import sys
+sys.path.append(os.getcwd())
+sys.path.append(os.path.dirname(__file__))
+
 import sqlalchemy
 import datetime
 from sqlalchemy.orm import mapper, sessionmaker
@@ -27,7 +32,7 @@ class ClientDatabase:
             
     
     def __init__(self, name):
-        self.database_engine = sqlalchemy.create_engine(f'sqlite:///databases/client_{name}.db3', echo=False, pool_recycle=7200,
+        self.database_engine = sqlalchemy.create_engine(f'sqlite:///{os.path.dirname(__file__)}/databases/client_{name}.db3', echo=False, pool_recycle=7200,
                                                         connect_args={'check_same_thread': False})
         self.metadata = sqlalchemy.MetaData()
         
@@ -93,3 +98,7 @@ class ClientDatabase:
     
     def get_known_users(self):
         return [user[0] for user in self.session.query(self.KnownUsers.username).all()]
+    
+
+if __name__ == '__main__':
+    pass

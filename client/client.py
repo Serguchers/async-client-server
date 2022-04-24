@@ -2,16 +2,21 @@ import sys
 import os
 
 sys.path.append(os.getcwd())
+sys.path.append(os.path.dirname(__file__))
+
 import socket
 import logging
 from log import client_log_config
 from common.variables import ACCOUNT_NAME, MESSAGE_STATUS, DEFAULT_IP, DEFAULT_PORT, DEFAULT_CLIENT_MODE
+from time import time
 from log.utils import log_deco
 import argparse
-from common.utils import send_message, convert_to_dict
+from common.utils import send_message, convert_to_dict, suppress_qt_warnings
 from threading import Thread
-from client.clientstorage import ClientDatabase
+from clientstorage import ClientDatabase
 from PyQt5.QtCore import pyqtSignal, QObject
+from PyQt5.QtWidgets import QApplication
+from main_window import ClientMainWindow
 
 log_client = logging.getLogger('client_logger')
 
@@ -165,19 +170,25 @@ class MessageReciever(Thread):
             try:
                 message = self.client.transport.recv(1024)
                 message = convert_to_dict(message)
+                print(message)
                 if message['action'] == 'msg' and message['message_text'] and message['account_name']:
                     print(f'Получено сообщение от {message["account_name"]}: {message["message_text"]}')
 
                     self.client.new_message.emit(message['account_name'])
+                    
                     self.client.database.save_message_history(self.client.username, message["account_name"], message["message_text"])
                     self.client.database.meet_user(message['account_name'])   
 
                 elif message['action'] == 'add_contact' and message['status'] == 'success':
                     print(f'Успешно добавлен контакт: {message["contact"]}')
+                    
                     self.client.database.add_contact(message['contact'])
                     self.client.database.meet_user(message['contact'])  
                 elif message['action'] == 'del_contact' and message['status'] == 'success':
                     print(f'Успешно удален контакт: {message["contact"]}')
+                    
+                    self.client.database.del_contact(message['contact'])
+                    
                 elif message['action'] == 'get_contacts' and message['status'] == 'success':
                     contacts = ', '.join(message['contacts'])
                     print(f'Список ваших контактов: {contacts}')
@@ -216,19 +227,16 @@ if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('addr', default=DEFAULT_IP, nargs='?')
     arg_parser.add_argument('port', default=DEFAULT_PORT, type=int, nargs='?')
-    arg_parser.add_argument('-n', '--name', default='test', nargs='?')
+    arg_parser.add_argument('-n', '--name', default='Sergei', nargs='?')
     namespace = arg_parser.parse_args()
     print(namespace.addr, namespace.port, namespace.name)
     
-    client = Client(namespace.addr, namespace.port, namespace.name)
+    client = Client(namespace.addr, namespace.port, namespace.name) 
+    client_app = QApplication(sys.argv)
     
-    user_interface = Thread(target=client.users_interface, daemon=True)
-    user_interface.start()
-    
-    while True:
-        if user_interface.is_alive():
-            continue
-        break
+    suppress_qt_warnings()  
+    main_window = ClientMainWindow(client)
+    client_app.exec_()
     
     
     

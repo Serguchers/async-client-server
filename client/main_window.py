@@ -16,19 +16,14 @@ import socket
 from common.utils import *
 from time import time
 from log import client_log_config
-from client.client import Client
-from client.clientstorage import ClientDatabase
+from clientstorage import ClientDatabase
 
 log_client = logging.getLogger('client_logger')
 
 
-client_app = QApplication(sys.argv)
-
-
-
 
 class ClientMainWindow(QMainWindow):
-    def __init__(self, client:Client):
+    def __init__(self, client):
         super().__init__()
         
         self.client = client
