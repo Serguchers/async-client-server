@@ -247,9 +247,9 @@ if __name__ == '__main__':
     config = configparser.ConfigParser()
     config_path = f'{os.path.dirname(os.path.realpath(__file__))}/server.ini'
     config.read(config_path)
+    config['SETTINGS']['database_path'] = os.path.dirname(__file__)
     
     database_path = os.path.join(config['SETTINGS']['database_path'], config['SETTINGS']['database_file'])
-    
     server = Server(namespace.p, namespace.a, database=database_path)
     server.daemon = True
     server.start()

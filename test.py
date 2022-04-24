@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QMainWindow, qApp, QMessageBox, QApplication, QListV
 from PyQt5.QtGui import QStandardItemModel, QStandardItem, QBrush, QColor, QFont
 from PyQt5.QtCore import pyqtSlot, QEvent, Qt, QObject, pyqtSignal
 from client_ui.main_client_window import Ui_UI_Client
-from clientstorage import ClientDatabase
+from client.clientstorage import ClientDatabase
 from threading import Thread, Lock
 import socket
 from common.utils import *

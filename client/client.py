@@ -1,19 +1,16 @@
-from concurrent.futures import thread
-from pydoc import cli
-from time import time
-from tkinter import E
-
-import PyQt5
-from common.variables import ACCOUNT_NAME, MESSAGE_STATUS, DEFAULT_IP, DEFAULT_PORT, DEFAULT_CLIENT_MODE
 import sys
+import os
+
+sys.path.append(os.getcwd())
 import socket
 import logging
 from log import client_log_config
+from common.variables import ACCOUNT_NAME, MESSAGE_STATUS, DEFAULT_IP, DEFAULT_PORT, DEFAULT_CLIENT_MODE
 from log.utils import log_deco
 import argparse
 from common.utils import send_message, convert_to_dict
 from threading import Thread
-from clientstorage import ClientDatabase
+from client.clientstorage import ClientDatabase
 from PyQt5.QtCore import pyqtSignal, QObject
 
 log_client = logging.getLogger('client_logger')
