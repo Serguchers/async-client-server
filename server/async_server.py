@@ -1,5 +1,7 @@
 import argparse
 import asyncio
+import imp
+import logging
 import json
 import sys
 import configparser
@@ -15,9 +17,13 @@ from server.server_gui import MainWindow, HistoryWindow, ConfigWindow, gui_creat
 from PyQt5.QtWidgets import QApplication, QMessageBox
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from log import server_log_config
+
+log_server = logging.getLogger('server_logger')
 
 CLIENTS = {}
 new_active_user = False
+
 
 class Server(Thread):
     def __init__(self, connection_port, connection_address, database='server_base.db3'):
@@ -103,8 +109,10 @@ class MessageProcessor(Thread):
             try:
                 data = self.message_queue.pop(0)
                 data['message'] = convert_to_dict(data['message'])
-            except:
+            except IndexError:
                 pass
+            except:
+                log_server.critical(f'Произошла ошибка при обработке сообщения {data}')
             else:
                 self.parse_message(data)
     
@@ -211,8 +219,10 @@ class MessageSender(Thread):
         while True:
             try:
                 message = self.messages_to_send.pop(0)
-            except:
+            except IndexError:
                 pass
+            except:
+                log_server.critical(f'Произошла ошибка при отправке сообщения {message}')
             else:
                 self.send_message(message)
         

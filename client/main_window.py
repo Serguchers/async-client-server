@@ -139,7 +139,6 @@ class ClientMainWindow(QMainWindow):
     # Handle message from user 
     @pyqtSlot(dict)
     def message(self, message):
-        log_client.info('Слот отработал')
         if message['action'] == 'msg':
             self.client.database.save_message_history(self.client.username, message["account_name"], message["message_text"])
             self.client.database.meet_user(message['account_name'])  
