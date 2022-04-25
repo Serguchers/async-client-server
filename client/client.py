@@ -149,36 +149,24 @@ class MessageReciever(Thread):
             try:
                 message = self.client.transport.recv(1024)
                 message = convert_to_dict(message)
-                print(message)
+                
                 if message['action'] == 'msg' and message['message_text'] and message['account_name']:
-                    print(f'Получено сообщение от {message["account_name"]}: {message["message_text"]}')
-
                     self.client.new_message.emit(message) 
-
                 elif message['action'] == 'add_contact' and message['status'] == 'success':
-                    print(f'Успешно добавлен контакт: {message["contact"]}')
-                    
                     self.client.new_message.emit(message) 
-                    
                 elif message['action'] == 'del_contact' and message['status'] == 'success':
-                    print(f'Успешно удален контакт: {message["contact"]}')
-                    
                     self.client.new_message.emit(message) 
-                    
                 elif message['action'] == 'get_contacts' and message['status'] == 'success':
                     contacts = ', '.join(message['contacts'])
-                    print(f'Список ваших контактов: {contacts}')
                 elif message['action'] == 'message_user':
                     if message['status'] == 'success':
                         self.client.database.meet_user(message['target_user'])    
                 elif message['action'] == 'search':
-                    print(f'Поиск удался {message["result"]}')
                     self.client.new_message.emit(message)
-                
                 else:
-                    print(f'Поступило некорректное сообщение с сервера: {message}')
+                    log_client.info(f'Поступило некорректное сообщение с сервера: {message}')
             except Exception:
-                print('Произошла ошибка.')
+                log_client.critical(f'Произошла ошибка при приёме сообщения {message}')
                 break
       
         
@@ -196,10 +184,11 @@ class MessageSender(Thread):
         while True:
             try:
                 message = self.messages_to_send.pop(0)
-            except:
+            except IndexError:
                 pass
+            except:
+                log_client.critical(f'Ошибка при отправке сообщения {message}')
             else:
-                print(message)
                 send_message(self.client.transport, message)
 
 
