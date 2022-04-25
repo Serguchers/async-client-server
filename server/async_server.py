@@ -1,21 +1,28 @@
 import argparse
 import asyncio
+import logging
 import json
 import sys
 import configparser
 import os
+sys.path.append(os.getcwd())
+sys.path.append(os.path.dirname(__file__))
 
 from threading import Lock, Thread
-from common.utils import convert_to_dict, suppress_qt_warnings
+from common.utils import convert_to_dict, suppress_qt_warnings, send_message_server
 from common.variables import ACTIONS, DEFAULT_PORT, ENCODING, MAX_CONNECTIONS
-from serverstorage import ServerStorage
-from server_gui import MainWindow, HistoryWindow, ConfigWindow, gui_create_model, create_stat_model
+from server.serverstorage import ServerStorage
+from server.server_gui import MainWindow, HistoryWindow, ConfigWindow, gui_create_model, create_stat_model
 from PyQt5.QtWidgets import QApplication, QMessageBox
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
+from log import server_log_config
+
+log_server = logging.getLogger('server_logger')
 
 CLIENTS = {}
 new_active_user = False
+
 
 class Server(Thread):
     def __init__(self, connection_port, connection_address, database='server_base.db3'):
@@ -101,8 +108,10 @@ class MessageProcessor(Thread):
             try:
                 data = self.message_queue.pop(0)
                 data['message'] = convert_to_dict(data['message'])
-            except:
+            except IndexError:
                 pass
+            except:
+                log_server.critical(f'Произошла ошибка при обработке сообщения {data}')
             else:
                 self.parse_message(data)
     
@@ -118,7 +127,6 @@ class MessageProcessor(Thread):
             CLIENTS[message['user']['account_name']] = (data['reader'], data['writer'])
             self.server.message_sender.messages_to_send.append({'response': 200,
                                                                 'sender': message['user']['account_name'],
-                                                                'destination': data['writer'], 
                                                                 'action': 'initial'})
             user_ip, user_port = data['writer'].get_extra_info('peername')
             self.storage.login_user(message['user']['account_name'], user_ip, user_port)
@@ -171,6 +179,22 @@ class MessageProcessor(Thread):
                                                                     'action': 'get_contacts',
                                                                     'contacts': contacts,
                                                                     'status': 'success'}) 
+        elif message['action'] == 'exit' and message['account_name']:
+            self.storage.logout_user(message['account_name'])
+            new_active_user = True
+        
+        elif message['action'] == 'search' and message['account_name'] and message['target_user']:
+            try:
+                filtered_users = self.storage.filter_users(message['target_user'])
+                print(filtered_users)
+            except:
+                pass
+            else:
+               self.server.message_sender.messages_to_send.append({'response': 200,
+                                                                    'destination': message['account_name'],
+                                                                    'action': 'search',
+                                                                    'result': filtered_users,
+                                                                    'status': 'success'}) 
 
         else:
             self.server.message_sender.messages_to_send.append({"response": 400, 
@@ -194,8 +218,10 @@ class MessageSender(Thread):
         while True:
             try:
                 message = self.messages_to_send.pop(0)
-            except:
+            except IndexError:
                 pass
+            except:
+                log_server.critical(f'Произошла ошибка при отправке сообщения {message}')
             else:
                 self.send_message(message)
         
@@ -209,56 +235,32 @@ class MessageSender(Thread):
         """
         
         if message['action'] == 'initial' or message['action'] == 'error':
-            transport = message['destination'].get_extra_info('socket')
-            del message['destination']
-            
-            message = json.dumps(message).encode(ENCODING)
-            try:
-                transport.send(message)
-            except:
-                self.storage.logout_user(message['sender'])
-                return
-            return
+            send_message_server(CLIENTS, message, 'sender')
         
         if message['action'] == 'msg':
             try:
-                transport = CLIENTS[message['destination']][1].get_extra_info('socket')
+                send_message_server(CLIENTS, message, 'destination')
             except:
-                return
-            
-            message = json.dumps(message).encode(ENCODING)
-            transport.send(message)
-            return
+                message = {'action': 'message_user','response': 400, 
+                           'destination': message['account_name'], 'status': 'failed'}
+                send_message_server(CLIENTS, message, 'destination')
+            else:
+                message = {'action': 'message_user', 'response': 200, 
+                            'destination': message['account_name'], 'target_user': message['destination'],
+                            'status': 'success'}
+                send_message_server(CLIENTS, message, 'destination')
         
         if message['action'] == 'add_contact':
-            try:
-                transport = CLIENTS[message['sender']][1].get_extra_info('socket')
-            except:
-                return
-            
-            message = json.dumps(message).encode(ENCODING)
-            transport.send(message)
-            return
+            send_message_server(CLIENTS, message, 'sender')
         
         if message['action'] == 'del_contact':
-            try:
-                transport = CLIENTS[message['sender']][1].get_extra_info('socket')
-            except:
-                return
-            
-            message = json.dumps(message).encode(ENCODING)
-            transport.send(message)
-            return
+            send_message_server(CLIENTS, message, 'sender')
 
         if message['action'] == 'get_contacts':
-            try:
-                transport = CLIENTS[message['destination']][1].get_extra_info('socket')
-            except:
-                return
+            send_message_server(CLIENTS, message, 'destination')
             
-            message = json.dumps(message).encode(ENCODING)
-            transport.send(message)
-            return
+        if message['action'] == 'search':
+            send_message_server(CLIENTS, message, 'destination')
         
         
         
@@ -274,9 +276,9 @@ if __name__ == '__main__':
     config = configparser.ConfigParser()
     config_path = f'{os.path.dirname(os.path.realpath(__file__))}/server.ini'
     config.read(config_path)
+    config['SETTINGS']['database_path'] = os.path.dirname(__file__)
     
     database_path = os.path.join(config['SETTINGS']['database_path'], config['SETTINGS']['database_file'])
-    
     server = Server(namespace.p, namespace.a, database=database_path)
     server.daemon = True
     server.start()

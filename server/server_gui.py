@@ -1,5 +1,7 @@
 import sys
 import os
+sys.path.append(os.getcwd())
+
 from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication, QLabel, QTableView, QDialog, QPushButton, \
     QLineEdit, QFileDialog, QMessageBox
 from PyQt5.QtGui import QStandardItemModel, QStandardItem

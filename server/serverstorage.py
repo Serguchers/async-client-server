@@ -1,6 +1,10 @@
 import sqlite3
 import sqlalchemy
 import datetime
+import sys
+import os
+sys.path.append(os.getcwd())
+
 from sqlalchemy.orm import mapper, sessionmaker
 from common.variables import SERVER_DATABASE
 
@@ -112,7 +116,7 @@ class ServerStorage:
     
     def logout_user(self, username):
         user = self.session.query(self.Users).filter_by(name=username).first()
-        self.session.query(self.ActiveUsers).flter_by(user=user.id).delete()
+        self.session.query(self.ActiveUsers).filter_by(user=user.id).delete()
         
         self.session.commit()
         
@@ -161,6 +165,10 @@ class ServerStorage:
                                           ).join(self.Users)
         
         return active_users.all()
+    
+    def filter_users(self, username):
+        all_users = self.session.query(self.Users.name).filter(self.Users.name.contains(username)).all()
+        return [i[0] for i in all_users]
     
     def message_history(self):
         message_history = self.session.query(

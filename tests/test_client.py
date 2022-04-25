@@ -3,7 +3,7 @@ import os
 sys.path.append(os.getcwd())
 
 from unittest import TestCase, main
-from client import Client
+from client.client import Client
 
 
 class TestClient(TestCase):
