@@ -1,6 +1,5 @@
 import argparse
 import asyncio
-import imp
 import logging
 import json
 import sys
