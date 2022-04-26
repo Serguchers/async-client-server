@@ -31,8 +31,8 @@ class Client(QObject):
     
     def __init__(self, connection_address, connection_port, username):
         super().__init__()
-        self.username = username
-        self.database = ClientDatabase(self.username)
+        self.username = None
+        self.database = None
         self.transport = None
 
         self.init_connection(connection_address, connection_port)
@@ -59,6 +59,10 @@ class Client(QObject):
         # else:
         #     print('Успешное подключение')
     
+    def success_login(self, username):
+        self.username = username
+        self.database = ClientDatabase(username)
+    
     def presence_msg(self):
         message = {
             "action": "presence",
@@ -77,21 +81,21 @@ class Client(QObject):
         elif response['response'] == 400:
             raise Exception
 
-    def sign_up(self, password):
-        password = hmac.new(password.encode('utf-8'), f'{client.username}'.encode('utf-8'), 'MD5')
+    def sign_up(self, username, password):
+        password = hmac.new(password.encode('utf-8'), f'{username}'.encode('utf-8'), 'MD5')
         request = {
             'action': 'sign up',
-            'account_name': self.username,
+            'account_name': username,
             'password': password.hexdigest()
         }
         self.MessageSender.messages_to_send.append(request)
         return request
     
-    def log_in(self, password):
-        password = hmac.new(password.encode('utf-8'), f'{client.username}'.encode('utf-8'), 'MD5')
+    def log_in(self, username, password):
+        password = hmac.new(password.encode('utf-8'), f'{username}'.encode('utf-8'), 'MD5')
         request = {
             'action': 'log in',
-            'account_name': self.username,
+            'account_name': username,
             'password': password.hexdigest()
         }
         self.MessageSender.messages_to_send.append(request)
@@ -171,7 +175,6 @@ class MessageReciever(Thread):
             try:
                 message = self.client.transport.recv(1024)
                 message = convert_to_dict(message)
-                print(message)
                 if message['action'] == 'msg' and message['message_text'] and message['account_name']:
                     self.client.new_message.emit(message) 
                 elif message['action'] == 'add_contact' and message['status'] == 'success':
@@ -187,16 +190,15 @@ class MessageReciever(Thread):
                     self.client.new_message.emit(message)
                 elif message['action'] == 'sign up':
                     if message['status'] == 'success':
-                        print('Успешная регистрация')
                         self.client.new_message.emit(message)
                     else:
-                        print('Провал регистрации')
+                        self.client.new_message.emit(message)
                 elif message['action'] == 'log in':
                     if message['status'] == 'success':
-                        print('Успешный вход')
                         self.client.new_message.emit(message)
                     else:
-                        print('Неуспешный выход')
+                        print(message)
+                        self.client.new_message.emit(message)
                 else:
                     log_client.info(f'Поступило некорректное сообщение с сервера: {message}')
             except Exception:
@@ -243,7 +245,7 @@ if __name__ == '__main__':
 
     login_window = Window(client)
     main_window = ClientMainWindow(client)
-    login_window.logged_in.connect(main_window.show)
+    login_window.logged_in.connect(main_window.success_login)
     client_app.exec_()
 
     

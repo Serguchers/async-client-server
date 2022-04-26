@@ -206,9 +206,8 @@ class MessageProcessor(Thread):
                                                                     'action': 'sign up',
                                                                     'status': 'user already exists'})
             else:
-                CLIENTS[message['account_name']] = (data['reader'], data['writer'])
                 self.server.message_sender.messages_to_send.append({'response': 200,
-                                                                    'destination': message['account_name'],
+                                                                    'destination': data['writer'],
                                                                     'action': 'sign up',
                                                                     'status': 'success'})
                 
@@ -218,7 +217,7 @@ class MessageProcessor(Thread):
             except WrongPassword:
                 log_server.info('Попытка войти с неверным паролем')
                 self.server.message_sender.messages_to_send.append({'response': 400,
-                                                                    'destination': message['account_name'],
+                                                                    'destination': data['writer'],
                                                                     'action': 'log in',
                                                                     'status': 'wrong password'})
             else:
@@ -297,6 +296,12 @@ class MessageSender(Thread):
             send_message_server(CLIENTS, message, 'destination')
         
         elif message['action'] == 'sign up':
+            transport = message['destination'].get_extra_info('socket')
+            del message['destination']
+            message = json.dumps(message).encode(ENCODING)
+            transport.send(message)
+            
+        elif message['action'] == 'log in':
             if message['status'] != 'success':
                 transport = message['destination'].get_extra_info('socket')
                 del message['destination']
@@ -304,9 +309,6 @@ class MessageSender(Thread):
                 transport.send(message)
             else:
                 send_message_server(CLIENTS, message, 'destination')
-            
-        elif message['action'] == 'log in':
-            send_message_server(CLIENTS, message, 'destination')
         
         
         

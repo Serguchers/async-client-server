@@ -36,7 +36,9 @@ class ClientMainWindow(QMainWindow):
         self.ui.setupUi(self)
         self.contacts_switch_button = QAction('Контакты', self)
         self.ui.menubar.addAction(self.contacts_switch_button)
-        
+        client.new_message.connect(self.message)
+
+    def success_login(self):
         # Exit button
         self.ui.action.triggered.connect(self.closeEvent)
         
@@ -63,15 +65,13 @@ class ClientMainWindow(QMainWindow):
         # Switch to contacts panel
         self.contacts_switch_button.triggered.connect(self.known_users_update)
         
-        #Connection
-        client.new_message.connect(self.message)
-        
+
         self.ui.chats_list.installEventFilter(self)
         
         # Prevent exit by pressing X
         self.setWindowFlags(QtCore.Qt.Window | QtCore.Qt.CustomizeWindowHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowMinimizeButtonHint)
         self.known_users_update()
-        #self.show()
+        self.show()
     
     # Select chat
     def select_chat(self):
