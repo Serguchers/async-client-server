@@ -1,3 +1,4 @@
+from pydoc import cli
 import sys
 import os
 
@@ -5,10 +6,11 @@ sys.path.append(os.getcwd())
 sys.path.append(os.path.dirname(__file__))
 
 import socket
+import hmac
 import logging
 from log import client_log_config
 from common.variables import ACCOUNT_NAME, MESSAGE_STATUS, DEFAULT_IP, DEFAULT_PORT, DEFAULT_CLIENT_MODE
-from time import time
+from time import time, sleep
 from log.utils import log_deco
 import argparse
 from common.utils import send_message, convert_to_dict, suppress_qt_warnings
@@ -46,15 +48,15 @@ class Client(QObject):
         self.transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.transport.connect((connection_address, connection_port))
 
-        try:
-            send_message(self.transport, self.presence_msg())
-            message = self.transport.recv(1024)
-            message = convert_to_dict(message)
-            self.process_response(message)
-        except:
-            print('Произошла ошибка при подключении')
-        else:
-            print('Успешное подключение')
+        # try:
+        #     send_message(self.transport, self.presence_msg())
+        #     message = self.transport.recv(1024)
+        #     message = convert_to_dict(message)
+        #     self.process_response(message)
+        # except:
+        #     print('Произошла ошибка при подключении')
+        # else:
+        #     print('Успешное подключение')
     
     def presence_msg(self):
         message = {
@@ -74,6 +76,23 @@ class Client(QObject):
         elif response['response'] == 400:
             raise Exception
 
+    def sign_up(self, password):
+        request = {
+            'action': 'sign up',
+            'account_name': self.username,
+            'password': password
+        }
+        self.MessageSender.messages_to_send.append(request)
+        return request
+    
+    def log_in(self, password):
+        request = {
+            'action': 'log in',
+            'account_name': self.username,
+            'password': password
+        }
+        self.MessageSender.messages_to_send.append(request)
+        return request
 
     def create_message(self, to_user, message_text):
         message_to_send = {
@@ -149,7 +168,7 @@ class MessageReciever(Thread):
             try:
                 message = self.client.transport.recv(1024)
                 message = convert_to_dict(message)
-                
+                print(message)
                 if message['action'] == 'msg' and message['message_text'] and message['account_name']:
                     self.client.new_message.emit(message) 
                 elif message['action'] == 'add_contact' and message['status'] == 'success':
@@ -163,6 +182,16 @@ class MessageReciever(Thread):
                         self.client.database.meet_user(message['target_user'])    
                 elif message['action'] == 'search':
                     self.client.new_message.emit(message)
+                elif message['action'] == 'sign up':
+                    if message['status'] == 'success':
+                        print('Успешная регистрация')
+                    else:
+                        print('Провал регистрации')
+                elif message['action'] == 'log in':
+                    if message['status'] == 'success':
+                        print('Успешный вход')
+                    else:
+                        print('Неуспешный выход')
                 else:
                     log_client.info(f'Поступило некорректное сообщение с сервера: {message}')
             except Exception:
@@ -189,6 +218,7 @@ class MessageSender(Thread):
             except:
                 log_client.critical(f'Ошибка при отправке сообщения {message}')
             else:
+                print(f'Отправлено сообщение {message}')
                 send_message(self.client.transport, message)
 
 
@@ -205,6 +235,12 @@ if __name__ == '__main__':
     client_app = QApplication(sys.argv)
     
     suppress_qt_warnings()  
+    password = b'test_pass'
+    hashed_pass = hmac.new(password, f'{client.username}'.encode('utf-8'), 'MD5')
+    client.sign_up(hashed_pass.hexdigest())
+    sleep(1)
+    client.log_in(hashed_pass.hexdigest())
+    
     main_window = ClientMainWindow(client)
     client_app.exec_()
     

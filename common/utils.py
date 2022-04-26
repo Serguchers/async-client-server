@@ -1,7 +1,8 @@
 import json
-from common.variables import ENCODING
+from common.variables import *
 import socket
 import os
+import hmac
 
 def convert_to_dict(message):
     if isinstance(message, bytes):
@@ -37,6 +38,10 @@ def suppress_qt_warnings():
     os.environ["QT_SCREEN_SCALE_FACTORS"] = "1"
     os.environ["QT_SCALE_FACTOR"] = "1"
    
-    
+def hash_password(password):
+    password = password.encode('utf-8')
+    pass_hash = hmac.new(password, SECRET_SALT, 'MD5')
+    return pass_hash.digest()
+   
 if __name__ == '__main__':
     pass

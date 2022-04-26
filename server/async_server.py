@@ -1,22 +1,25 @@
 import argparse
 import asyncio
+from email import message
 import logging
 import json
 import sys
 import configparser
 import os
+
 sys.path.append(os.getcwd())
 sys.path.append(os.path.dirname(__file__))
 
 from threading import Lock, Thread
-from common.utils import convert_to_dict, suppress_qt_warnings, send_message_server
-from common.variables import ACTIONS, DEFAULT_PORT, ENCODING, MAX_CONNECTIONS
+from common.utils import *
+from common.variables import *
 from server.serverstorage import ServerStorage
 from server.server_gui import MainWindow, HistoryWindow, ConfigWindow, gui_create_model, create_stat_model
 from PyQt5.QtWidgets import QApplication, QMessageBox
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from log import server_log_config
+from custrom_server_exceptions import UserAlreadyExistsError, WrongPassword
 
 log_server = logging.getLogger('server_logger')
 
@@ -63,9 +66,7 @@ class Server(Thread):
         while True:
             try:
                 message = await self.process_client_message(reader)
-            except ConnectionResetError:
-                to_remove = tuple(filter(lambda x: x[1] == (reader, writer), CLIENTS.items()))
-                del CLIENTS[to_remove[0][0]]
+            except:
                 break
                 
             self.message_processor.message_queue.append({'message': message,
@@ -122,15 +123,14 @@ class MessageProcessor(Thread):
             data (dict): usefull data related to message
         """
         message = data['message']
+        user_ip, user_port = data['writer'].get_extra_info('peername')
         global new_active_user
         if message["action"] == 'presence' and message["time"]:
-            CLIENTS[message['user']['account_name']] = (data['reader'], data['writer'])
             self.server.message_sender.messages_to_send.append({'response': 200,
                                                                 'sender': message['user']['account_name'],
                                                                 'action': 'initial'})
-            user_ip, user_port = data['writer'].get_extra_info('peername')
-            self.storage.login_user(message['user']['account_name'], user_ip, user_port)
-            new_active_user = True
+           # self.storage.login_user(message['user']['account_name'], user_ip, user_port)
+           # new_active_user = True
 
         elif message['action'] == 'msg' and message['time'] and message['account_name'] \
             and message['message_text'] and message['destination']:
@@ -181,12 +181,12 @@ class MessageProcessor(Thread):
                                                                     'status': 'success'}) 
         elif message['action'] == 'exit' and message['account_name']:
             self.storage.logout_user(message['account_name'])
+            del CLIENTS[message['account_name']]
             new_active_user = True
         
         elif message['action'] == 'search' and message['account_name'] and message['target_user']:
             try:
                 filtered_users = self.storage.filter_users(message['target_user'])
-                print(filtered_users)
             except:
                 pass
             else:
@@ -195,11 +195,44 @@ class MessageProcessor(Thread):
                                                                     'action': 'search',
                                                                     'result': filtered_users,
                                                                     'status': 'success'}) 
+        
+        elif message['action'] == 'sign up':
+            try:
+                self.storage.register_user(message['account_name'], hash_password(message['password']))
+            except UserAlreadyExistsError:
+                log_server.info('Такой пользователь уже существует')
+                self.server.message_sender.messages_to_send.append({'response': 400,
+                                                                    'destination': data['writer'],
+                                                                    'action': 'sign up',
+                                                                    'status': 'user already exists'})
+            else:
+                CLIENTS[message['account_name']] = (data['reader'], data['writer'])
+                self.server.message_sender.messages_to_send.append({'response': 200,
+                                                                    'destination': message['account_name'],
+                                                                    'action': 'sign up',
+                                                                    'status': 'success'})
+                
+        elif message['action'] == 'log in':
+            try:
+                self.storage.login_user(message['account_name'], hash_password(message['password']), user_ip, user_port)
+            except WrongPassword:
+                log_server.info('Попытка войти с неверным паролем')
+                self.server.message_sender.messages_to_send.append({'response': 400,
+                                                                    'destination': message['account_name'],
+                                                                    'action': 'log in',
+                                                                    'status': 'wrong password'})
+            else:
+                CLIENTS[message['account_name']] = (data['reader'], data['writer'])
+                self.server.message_sender.messages_to_send.append({'response': 200,
+                                                                    'destination': message['account_name'],
+                                                                    'action': 'log in',
+                                                                    'status': 'success'})
+                new_active_user = True
 
         else:
             self.server.message_sender.messages_to_send.append({"response": 400, 
                                                                 "alert": "Wrong message format!",
-                                                                'destination': data['writer'],
+                                                                'destination': message['account_name'],
                                                                 'action': 'error'})
         return
         
@@ -224,6 +257,7 @@ class MessageSender(Thread):
                 log_server.critical(f'Произошла ошибка при отправке сообщения {message}')
             else:
                 self.send_message(message)
+
         
     def send_message(self, message):
         """
@@ -237,7 +271,7 @@ class MessageSender(Thread):
         if message['action'] == 'initial' or message['action'] == 'error':
             send_message_server(CLIENTS, message, 'sender')
         
-        if message['action'] == 'msg':
+        elif message['action'] == 'msg':
             try:
                 send_message_server(CLIENTS, message, 'destination')
             except:
@@ -250,16 +284,28 @@ class MessageSender(Thread):
                             'status': 'success'}
                 send_message_server(CLIENTS, message, 'destination')
         
-        if message['action'] == 'add_contact':
+        elif message['action'] == 'add_contact':
             send_message_server(CLIENTS, message, 'sender')
         
-        if message['action'] == 'del_contact':
+        elif message['action'] == 'del_contact':
             send_message_server(CLIENTS, message, 'sender')
 
-        if message['action'] == 'get_contacts':
+        elif message['action'] == 'get_contacts':
             send_message_server(CLIENTS, message, 'destination')
             
-        if message['action'] == 'search':
+        elif message['action'] == 'search':
+            send_message_server(CLIENTS, message, 'destination')
+        
+        elif message['action'] == 'sign up':
+            if message['status'] != 'success':
+                transport = message['destination'].get_extra_info('socket')
+                del message['destination']
+                message = json.dumps(message).encode(ENCODING)
+                transport.send(message)
+            else:
+                send_message_server(CLIENTS, message, 'destination')
+            
+        elif message['action'] == 'log in':
             send_message_server(CLIENTS, message, 'destination')
         
         
