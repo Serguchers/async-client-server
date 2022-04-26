@@ -19,6 +19,7 @@ from clientstorage import ClientDatabase
 from PyQt5.QtCore import pyqtSignal, QObject
 from PyQt5.QtWidgets import QApplication
 from main_window import ClientMainWindow
+from login_window import Window
 
 log_client = logging.getLogger('client_logger')
 
@@ -77,19 +78,21 @@ class Client(QObject):
             raise Exception
 
     def sign_up(self, password):
+        password = hmac.new(password.encode('utf-8'), f'{client.username}'.encode('utf-8'), 'MD5')
         request = {
             'action': 'sign up',
             'account_name': self.username,
-            'password': password
+            'password': password.hexdigest()
         }
         self.MessageSender.messages_to_send.append(request)
         return request
     
     def log_in(self, password):
+        password = hmac.new(password.encode('utf-8'), f'{client.username}'.encode('utf-8'), 'MD5')
         request = {
             'action': 'log in',
             'account_name': self.username,
-            'password': password
+            'password': password.hexdigest()
         }
         self.MessageSender.messages_to_send.append(request)
         return request
@@ -185,11 +188,13 @@ class MessageReciever(Thread):
                 elif message['action'] == 'sign up':
                     if message['status'] == 'success':
                         print('Успешная регистрация')
+                        self.client.new_message.emit(message)
                     else:
                         print('Провал регистрации')
                 elif message['action'] == 'log in':
                     if message['status'] == 'success':
                         print('Успешный вход')
+                        self.client.new_message.emit(message)
                     else:
                         print('Неуспешный выход')
                 else:
@@ -235,14 +240,12 @@ if __name__ == '__main__':
     client_app = QApplication(sys.argv)
     
     suppress_qt_warnings()  
-    password = b'test_pass'
-    hashed_pass = hmac.new(password, f'{client.username}'.encode('utf-8'), 'MD5')
-    client.sign_up(hashed_pass.hexdigest())
-    sleep(1)
-    client.log_in(hashed_pass.hexdigest())
-    
+
+    login_window = Window(client)
     main_window = ClientMainWindow(client)
+    login_window.logged_in.connect(main_window.show)
     client_app.exec_()
+
     
     
     

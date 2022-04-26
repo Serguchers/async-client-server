@@ -71,7 +71,7 @@ class ClientMainWindow(QMainWindow):
         # Prevent exit by pressing X
         self.setWindowFlags(QtCore.Qt.Window | QtCore.Qt.CustomizeWindowHint | QtCore.Qt.WindowTitleHint | QtCore.Qt.WindowMinimizeButtonHint)
         self.known_users_update()
-        self.show()
+        #self.show()
     
     # Select chat
     def select_chat(self):
