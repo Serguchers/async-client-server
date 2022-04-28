@@ -125,78 +125,8 @@ class MessageProcessor(Thread):
         message = data['message']
         user_ip, user_port = data['writer'].get_extra_info('peername')
         global new_active_user
-        if message["action"] == 'presence' and message["time"]:
-            self.server.message_sender.messages_to_send.append({'response': 200,
-                                                                'sender': message['user']['account_name'],
-                                                                'action': 'initial'})
-           # self.storage.login_user(message['user']['account_name'], user_ip, user_port)
-           # new_active_user = True
-
-        elif message['action'] == 'msg' and message['time'] and message['account_name'] \
-            and message['message_text'] and message['destination']:
-            self.storage.write_statistics(message['account_name'], 'sent')
-            self.storage.write_statistics(message['account_name'], 'accepted')
-            self.server.message_sender.messages_to_send.append(message)
         
-        elif message['action'] == 'add_contact' and message['account_name'] and message['destination']:
-            try:
-                self.storage.add_contact(message['account_name'], message['destination'])
-            except:
-                self.server.message_sender.messages_to_send.append({'response': 400,
-                                                                    'sender': message['account_name'],
-                                                                    'action': 'add_contact',
-                                                                    'contact': message['destination'],
-                                                                    'status': 'failed'})
-            else:
-               self.server.message_sender.messages_to_send.append({'response': 200,
-                                                                    'sender': message['account_name'],
-                                                                    'action': 'add_contact',
-                                                                    'contact': message['destination'],
-                                                                    'status': 'success'}) 
-        elif message['action'] == 'del_contact' and message['account_name'] and message['destination']:
-            try:
-                self.storage.del_contact(message['account_name'], message['destination'])
-            except:
-                self.server.message_sender.messages_to_send.append({'response': 400,
-                                                                    'sender': message['account_name'],
-                                                                    'action': 'del_contact',
-                                                                    'contact': message['destination'],
-                                                                    'status': 'failed'})
-            else:
-               self.server.message_sender.messages_to_send.append({'response': 200,
-                                                                    'sender': message['account_name'],
-                                                                    'action': 'del_contact',
-                                                                    'contact': message['destination'],
-                                                                    'status': 'success'}) 
-        elif message['action'] == 'get_contacts' and message['account_name']:
-            try:
-                contacts = self.storage.get_users_contacts(message['account_name'])
-            except:
-                pass
-            else:
-                self.server.message_sender.messages_to_send.append({'response': 200,
-                                                                    'destination': message['account_name'],
-                                                                    'action': 'get_contacts',
-                                                                    'contacts': contacts,
-                                                                    'status': 'success'}) 
-        elif message['action'] == 'exit' and message['account_name']:
-            self.storage.logout_user(message['account_name'])
-            del CLIENTS[message['account_name']]
-            new_active_user = True
-        
-        elif message['action'] == 'search' and message['account_name'] and message['target_user']:
-            try:
-                filtered_users = self.storage.filter_users(message['target_user'])
-            except:
-                pass
-            else:
-               self.server.message_sender.messages_to_send.append({'response': 200,
-                                                                    'destination': message['account_name'],
-                                                                    'action': 'search',
-                                                                    'result': filtered_users,
-                                                                    'status': 'success'}) 
-        
-        elif message['action'] == 'sign up':
+        if message['action'] == 'sign up':
             try:
                 self.storage.register_user(message['account_name'], hash_password(message['password']))
             except UserAlreadyExistsError:
@@ -230,6 +160,76 @@ class MessageProcessor(Thread):
 
         else:
             self.server.message_sender.messages_to_send.append({"response": 400, 
+                                                                "alert": "Wrong message format!",
+                                                                'destination': message['account_name'],
+                                                                'action': 'error'})
+            
+        if message['account_name'] in CLIENTS:
+            if message['action'] == 'msg' and message['time'] and message['account_name'] \
+            and message['message_text'] and message['destination']:
+                self.storage.write_statistics(message['account_name'], 'sent')
+                self.storage.write_statistics(message['account_name'], 'accepted')
+                self.server.message_sender.messages_to_send.append(message)
+        
+            elif message['action'] == 'add_contact' and message['account_name'] and message['destination']:
+                try:
+                    self.storage.add_contact(message['account_name'], message['destination'])
+                except:
+                    self.server.message_sender.messages_to_send.append({'response': 400,
+                                                                        'sender': message['account_name'],
+                                                                        'action': 'add_contact',
+                                                                        'contact': message['destination'],
+                                                                        'status': 'failed'})
+                else:
+                    self.server.message_sender.messages_to_send.append({'response': 200,
+                                                                        'sender': message['account_name'],
+                                                                        'action': 'add_contact',
+                                                                        'contact': message['destination'],
+                                                                        'status': 'success'}) 
+            elif message['action'] == 'del_contact' and message['account_name'] and message['destination']:
+                try:
+                    self.storage.del_contact(message['account_name'], message['destination'])
+                except:
+                    self.server.message_sender.messages_to_send.append({'response': 400,
+                                                                        'sender': message['account_name'],
+                                                                        'action': 'del_contact',
+                                                                        'contact': message['destination'],
+                                                                        'status': 'failed'})
+                else:
+                    self.server.message_sender.messages_to_send.append({'response': 200,
+                                                                        'sender': message['account_name'],
+                                                                        'action': 'del_contact',
+                                                                        'contact': message['destination'],
+                                                                        'status': 'success'}) 
+            elif message['action'] == 'get_contacts' and message['account_name']:
+                try:
+                    contacts = self.storage.get_users_contacts(message['account_name'])
+                except:
+                    pass
+                else:
+                    self.server.message_sender.messages_to_send.append({'response': 200,
+                                                                        'destination': message['account_name'],
+                                                                        'action': 'get_contacts',
+                                                                        'contacts': contacts,
+                                                                        'status': 'success'}) 
+            elif message['action'] == 'exit' and message['account_name']:
+                self.storage.logout_user(message['account_name'])
+                del CLIENTS[message['account_name']]
+                new_active_user = True
+            
+            elif message['action'] == 'search' and message['account_name'] and message['target_user']:
+                try:
+                    filtered_users = self.storage.filter_users(message['target_user'])
+                except:
+                    pass
+                else:
+                    self.server.message_sender.messages_to_send.append({'response': 200,
+                                                                        'destination': message['account_name'],
+                                                                        'action': 'search',
+                                                                        'result': filtered_users,
+                                                                        'status': 'success'}) 
+            else:
+                self.server.message_sender.messages_to_send.append({"response": 400, 
                                                                 "alert": "Wrong message format!",
                                                                 'destination': message['account_name'],
                                                                 'action': 'error'})

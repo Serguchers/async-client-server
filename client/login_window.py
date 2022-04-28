@@ -43,6 +43,7 @@ class Window(QDialog):
             if message['status'] == 'success':
                 self.client.success_login(message['destination'])
                 self.logged_in.emit()
+                self.close()
             else:
                 self.show_error_box('Неверный логин или пароль!')
                 self.message_box.show()

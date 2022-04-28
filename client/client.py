@@ -29,7 +29,7 @@ class Client(QObject):
     
     new_message = pyqtSignal(dict)
     
-    def __init__(self, connection_address, connection_port, username):
+    def __init__(self, connection_address, connection_port):
         super().__init__()
         self.username = None
         self.database = None
@@ -234,11 +234,10 @@ if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('addr', default=DEFAULT_IP, nargs='?')
     arg_parser.add_argument('port', default=DEFAULT_PORT, type=int, nargs='?')
-    arg_parser.add_argument('-n', '--name', default='Sergei', nargs='?')
     namespace = arg_parser.parse_args()
-    print(namespace.addr, namespace.port, namespace.name)
+    print(namespace.addr, namespace.port)
     
-    client = Client(namespace.addr, namespace.port, namespace.name) 
+    client = Client(namespace.addr, namespace.port) 
     client_app = QApplication(sys.argv)
     
     suppress_qt_warnings()  

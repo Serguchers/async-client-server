@@ -30,8 +30,7 @@ def send_message_server(clients, message, key):
         return
     message = json.dumps(message).encode(ENCODING)
     transport.send(message)
-    
-   
+      
 def suppress_qt_warnings():
     os.environ["QT_DEVICE_PIXEL_RATIO"] = "0"
     os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
