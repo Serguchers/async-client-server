@@ -3,17 +3,20 @@ import sqlalchemy
 import datetime
 import sys
 import os
+
 sys.path.append(os.getcwd())
 
 from sqlalchemy.orm import mapper, sessionmaker
 from common.variables import SERVER_DATABASE
+from custrom_server_exceptions import UserAlreadyExistsError, WrongPassword
 
 
 class ServerStorage:
     class Users:
-        def __init__(self, username):
+        def __init__(self, username, password):
             self.id = None
             self.name = username
+            self.password = password
             self.last_login = datetime.datetime.now()
     
     class ActiveUsers:
@@ -53,6 +56,7 @@ class ServerStorage:
         users_table = sqlalchemy.Table('Users', self.metadata,
                                        sqlalchemy.Column('id', sqlalchemy.Integer, primary_key=True),
                                        sqlalchemy.Column('name', sqlalchemy.String, unique=True),
+                                       sqlalchemy.Column('password', sqlalchemy.BLOB),
                                        sqlalchemy.Column('last_login', sqlalchemy.DateTime))
         
         active_users_table = sqlalchemy.Table('Active_users', self.metadata,
@@ -93,26 +97,27 @@ class ServerStorage:
         self.session.query(self.ActiveUsers).delete()
         self.session.commit()
         
-    def login_user(self, username, ip_address, port):
+    def register_user(self, username, password):
         user_check = self.session.query(self.Users).filter_by(name=username)
         if user_check.count():
-            user = user_check.first()
-            user.last_login = datetime.datetime.now()
+            raise UserAlreadyExistsError
         else:
-            user = self.Users(username)
+            user = self.Users(username, password)
             self.session.add(user)
             self.session.commit()
             user_statistics = self.UsersStatistics(user.id)
             self.session.add(user_statistics)
             self.session.commit()
-        
-        new_active_user = self.ActiveUsers(user.id, ip_address, port, datetime.datetime.now())
-        self.session.add(new_active_user)
-        
-        history = self.LoginHistory(user.id, datetime.datetime.now(), ip_address, port)
-        self.session.add(history)
-        
-        self.session.commit()
+            
+    def login_user(self, username, password, ip, port):
+        user = self.session.query(self.Users).filter_by(name=username).first()
+        if user.password == password:
+            user.last_login = datetime.datetime.now()
+            logged_in_user = self.ActiveUsers(user.id, ip, port, datetime.datetime.now())
+            self.session.add(logged_in_user)
+            self.session.commit()
+        else:
+            raise WrongPassword
     
     def logout_user(self, username):
         user = self.session.query(self.Users).filter_by(name=username).first()

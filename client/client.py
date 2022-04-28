@@ -1,3 +1,4 @@
+from pydoc import cli
 import sys
 import os
 
@@ -5,10 +6,11 @@ sys.path.append(os.getcwd())
 sys.path.append(os.path.dirname(__file__))
 
 import socket
+import hmac
 import logging
 from log import client_log_config
 from common.variables import ACCOUNT_NAME, MESSAGE_STATUS, DEFAULT_IP, DEFAULT_PORT, DEFAULT_CLIENT_MODE
-from time import time
+from time import time, sleep
 from log.utils import log_deco
 import argparse
 from common.utils import send_message, convert_to_dict, suppress_qt_warnings
@@ -17,6 +19,7 @@ from clientstorage import ClientDatabase
 from PyQt5.QtCore import pyqtSignal, QObject
 from PyQt5.QtWidgets import QApplication
 from main_window import ClientMainWindow
+from login_window import Window
 
 log_client = logging.getLogger('client_logger')
 
@@ -26,10 +29,10 @@ class Client(QObject):
     
     new_message = pyqtSignal(dict)
     
-    def __init__(self, connection_address, connection_port, username):
+    def __init__(self, connection_address, connection_port):
         super().__init__()
-        self.username = username
-        self.database = ClientDatabase(self.username)
+        self.username = None
+        self.database = None
         self.transport = None
 
         self.init_connection(connection_address, connection_port)
@@ -46,15 +49,19 @@ class Client(QObject):
         self.transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.transport.connect((connection_address, connection_port))
 
-        try:
-            send_message(self.transport, self.presence_msg())
-            message = self.transport.recv(1024)
-            message = convert_to_dict(message)
-            self.process_response(message)
-        except:
-            print('Произошла ошибка при подключении')
-        else:
-            print('Успешное подключение')
+        # try:
+        #     send_message(self.transport, self.presence_msg())
+        #     message = self.transport.recv(1024)
+        #     message = convert_to_dict(message)
+        #     self.process_response(message)
+        # except:
+        #     print('Произошла ошибка при подключении')
+        # else:
+        #     print('Успешное подключение')
+    
+    def success_login(self, username):
+        self.username = username
+        self.database = ClientDatabase(username)
     
     def presence_msg(self):
         message = {
@@ -74,6 +81,25 @@ class Client(QObject):
         elif response['response'] == 400:
             raise Exception
 
+    def sign_up(self, username, password):
+        password = hmac.new(password.encode('utf-8'), f'{username}'.encode('utf-8'), 'MD5')
+        request = {
+            'action': 'sign up',
+            'account_name': username,
+            'password': password.hexdigest()
+        }
+        self.MessageSender.messages_to_send.append(request)
+        return request
+    
+    def log_in(self, username, password):
+        password = hmac.new(password.encode('utf-8'), f'{username}'.encode('utf-8'), 'MD5')
+        request = {
+            'action': 'log in',
+            'account_name': username,
+            'password': password.hexdigest()
+        }
+        self.MessageSender.messages_to_send.append(request)
+        return request
 
     def create_message(self, to_user, message_text):
         message_to_send = {
@@ -149,7 +175,6 @@ class MessageReciever(Thread):
             try:
                 message = self.client.transport.recv(1024)
                 message = convert_to_dict(message)
-                
                 if message['action'] == 'msg' and message['message_text'] and message['account_name']:
                     self.client.new_message.emit(message) 
                 elif message['action'] == 'add_contact' and message['status'] == 'success':
@@ -163,6 +188,17 @@ class MessageReciever(Thread):
                         self.client.database.meet_user(message['target_user'])    
                 elif message['action'] == 'search':
                     self.client.new_message.emit(message)
+                elif message['action'] == 'sign up':
+                    if message['status'] == 'success':
+                        self.client.new_message.emit(message)
+                    else:
+                        self.client.new_message.emit(message)
+                elif message['action'] == 'log in':
+                    if message['status'] == 'success':
+                        self.client.new_message.emit(message)
+                    else:
+                        print(message)
+                        self.client.new_message.emit(message)
                 else:
                     log_client.info(f'Поступило некорректное сообщение с сервера: {message}')
             except Exception:
@@ -189,6 +225,7 @@ class MessageSender(Thread):
             except:
                 log_client.critical(f'Ошибка при отправке сообщения {message}')
             else:
+                print(f'Отправлено сообщение {message}')
                 send_message(self.client.transport, message)
 
 
@@ -197,16 +234,19 @@ if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('addr', default=DEFAULT_IP, nargs='?')
     arg_parser.add_argument('port', default=DEFAULT_PORT, type=int, nargs='?')
-    arg_parser.add_argument('-n', '--name', default='Sergei', nargs='?')
     namespace = arg_parser.parse_args()
-    print(namespace.addr, namespace.port, namespace.name)
+    print(namespace.addr, namespace.port)
     
-    client = Client(namespace.addr, namespace.port, namespace.name) 
+    client = Client(namespace.addr, namespace.port) 
     client_app = QApplication(sys.argv)
     
     suppress_qt_warnings()  
+
+    login_window = Window(client)
     main_window = ClientMainWindow(client)
+    login_window.logged_in.connect(main_window.success_login)
     client_app.exec_()
+
     
     
     
