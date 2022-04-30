@@ -1,12 +1,23 @@
 import sys
 import os
+
 sys.path.append(os.getcwd())
 
-from PyQt5.QtWidgets import QMainWindow, QAction, qApp, QApplication, QLabel, QTableView, QDialog, QPushButton, \
-    QLineEdit, QFileDialog, QMessageBox
+from PyQt5.QtWidgets import (
+    QMainWindow,
+    QAction,
+    qApp,
+    QApplication,
+    QLabel,
+    QTableView,
+    QDialog,
+    QPushButton,
+    QLineEdit,
+    QFileDialog,
+    QMessageBox,
+)
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtCore import Qt
-
 
 
 # Класс основного окна
@@ -17,25 +28,25 @@ class MainWindow(QMainWindow):
 
     def initUI(self):
         # Кнопка выхода
-        exitAction = QAction('Выход', self)
-        exitAction.setShortcut('Ctrl+Q')
+        exitAction = QAction("Выход", self)
+        exitAction.setShortcut("Ctrl+Q")
         exitAction.triggered.connect(qApp.quit)
 
         # Кнопка обновить список клиентов
-        self.refresh_button = QAction('Обновить список', self)
+        self.refresh_button = QAction("Обновить список", self)
 
         # Кнопка настроек сервера
-        self.config_btn = QAction('Настройки сервера', self)
+        self.config_btn = QAction("Настройки сервера", self)
 
         # Кнопка вывести историю сообщений
-        self.show_history_button = QAction('История клиентов', self)
+        self.show_history_button = QAction("История клиентов", self)
 
         # Статусбар
         # dock widget
         self.statusBar()
 
         # Тулбар
-        self.toolbar = self.addToolBar('MainBar')
+        self.toolbar = self.addToolBar("MainBar")
         self.toolbar.addAction(exitAction)
         self.toolbar.addAction(self.refresh_button)
         self.toolbar.addAction(self.show_history_button)
@@ -44,10 +55,10 @@ class MainWindow(QMainWindow):
         # Настройки геометрии основного окна
         # Поскольку работать с динамическими размерами мы не умеем, и мало времени на изучение, размер окна фиксирован.
         self.setFixedSize(800, 600)
-        self.setWindowTitle('Messaging Server alpha release')
+        self.setWindowTitle("Messaging Server alpha release")
 
         # Надпись о том, что ниже список подключённых клиентов
-        self.label = QLabel('Список подключённых клиентов:', self)
+        self.label = QLabel("Список подключённых клиентов:", self)
         self.label.setFixedSize(240, 15)
         self.label.move(10, 25)
 
@@ -68,12 +79,12 @@ class HistoryWindow(QDialog):
 
     def initUI(self):
         # Настройки окна:
-        self.setWindowTitle('Статистика клиентов')
+        self.setWindowTitle("Статистика клиентов")
         self.setFixedSize(600, 700)
         self.setAttribute(Qt.WA_DeleteOnClose)
 
         # Кнапка закрытия окна
-        self.close_button = QPushButton('Закрыть', self)
+        self.close_button = QPushButton("Закрыть", self)
         self.close_button.move(250, 650)
         self.close_button.clicked.connect(self.close)
 
@@ -94,10 +105,10 @@ class ConfigWindow(QDialog):
     def initUI(self):
         # Настройки окна
         self.setFixedSize(365, 260)
-        self.setWindowTitle('Настройки сервера')
+        self.setWindowTitle("Настройки сервера")
 
         # Надпись о файле базы данных:
-        self.db_path_label = QLabel('Путь до файла базы данных: ', self)
+        self.db_path_label = QLabel("Путь до файла базы данных: ", self)
         self.db_path_label.move(10, 10)
         self.db_path_label.setFixedSize(240, 15)
 
@@ -108,7 +119,7 @@ class ConfigWindow(QDialog):
         self.db_path.setReadOnly(True)
 
         # Кнопка выбора пути.
-        self.db_path_select = QPushButton('Обзор...', self)
+        self.db_path_select = QPushButton("Обзор...", self)
         self.db_path_select.move(275, 28)
 
         # Функция обработчик открытия окна выбора папки
@@ -116,23 +127,23 @@ class ConfigWindow(QDialog):
             global dialog
             dialog = QFileDialog(self)
             path = dialog.getExistingDirectory()
-            path = path.replace('/', '\\')
+            path = path.replace("/", "\\")
             self.db_path.insert(path)
 
         self.db_path_select.clicked.connect(open_file_dialog)
 
         # Метка с именем поля файла базы данных
-        self.db_file_label = QLabel('Имя файла базы данных: ', self)
+        self.db_file_label = QLabel("Имя файла базы данных: ", self)
         self.db_file_label.move(10, 68)
         self.db_file_label.setFixedSize(180, 15)
 
         # Поле для ввода имени файла
         self.db_file = QLineEdit(self)
         self.db_file.move(200, 66)
-        self.db_file.setFixedSize(150 , 20)
+        self.db_file.setFixedSize(150, 20)
 
         # Метка с номером порта
-        self.port_label = QLabel('Номер порта для соединений:', self)
+        self.port_label = QLabel("Номер порта для соединений:", self)
         self.port_label.move(10, 108)
         self.port_label.setFixedSize(180, 15)
 
@@ -142,12 +153,15 @@ class ConfigWindow(QDialog):
         self.port.setFixedSize(150, 20)
 
         # Метка с адресом для соединений
-        self.ip_label = QLabel('С какого IP принимаем соединения:', self)
+        self.ip_label = QLabel("С какого IP принимаем соединения:", self)
         self.ip_label.move(10, 148)
         self.ip_label.setFixedSize(180, 15)
 
         # Метка с напоминанием о пустом поле.
-        self.ip_label_note = QLabel(' оставьте это поле пустым, чтобы\n принимать соединения с любых адресов.', self)
+        self.ip_label_note = QLabel(
+            " оставьте это поле пустым, чтобы\n принимать соединения с любых адресов.",
+            self,
+        )
         self.ip_label_note.move(10, 168)
         self.ip_label_note.setFixedSize(500, 30)
 
@@ -157,22 +171,24 @@ class ConfigWindow(QDialog):
         self.ip.setFixedSize(150, 20)
 
         # Кнопка сохранения настроек
-        self.save_btn = QPushButton('Сохранить' , self)
-        self.save_btn.move(190 , 220)
+        self.save_btn = QPushButton("Сохранить", self)
+        self.save_btn.move(190, 220)
 
         # Кнапка закрытия окна
-        self.close_button = QPushButton('Закрыть', self)
+        self.close_button = QPushButton("Закрыть", self)
         self.close_button.move(275, 220)
         self.close_button.clicked.connect(self.close)
 
         self.show()
-        
-        
+
+
 # GUI - Создание таблицы QModel, для отображения в окне программы.
 def gui_create_model(database):
     list_users = database.active_users_list()
     list = QStandardItemModel()
-    list.setHorizontalHeaderLabels(['Имя Клиента', 'IP Адрес', 'Порт', 'Время подключения'])
+    list.setHorizontalHeaderLabels(
+        ["Имя Клиента", "IP Адрес", "Порт", "Время подключения"]
+    )
     for row in list_users:
         user, ip, port, time = row
         user = QStandardItem(user)
@@ -196,7 +212,13 @@ def create_stat_model(database):
     # Объект модели данных:
     list = QStandardItemModel()
     list.setHorizontalHeaderLabels(
-        ['Имя Клиента', 'Последний раз входил', 'Сообщений отправлено', 'Сообщений получено'])
+        [
+            "Имя Клиента",
+            "Последний раз входил",
+            "Сообщений отправлено",
+            "Сообщений получено",
+        ]
+    )
     for row in hist_list:
         user, last_seen, sent, recvd = row
         user = QStandardItem(user)
@@ -211,6 +233,6 @@ def create_stat_model(database):
     return list
 
 
-if __name__ == '__main__':
-    
+if __name__ == "__main__":
+
     pass

@@ -15,7 +15,9 @@ class UI_Client(object):
     def setupUi(self, UI_Client):
         UI_Client.setObjectName("UI_Client")
         UI_Client.resize(906, 675)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Preferred
+        )
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(UI_Client.sizePolicy().hasHeightForWidth())
@@ -73,7 +75,9 @@ class UI_Client(object):
     def retranslateUi(self, UI_Client):
         _translate = QtCore.QCoreApplication.translate
         UI_Client.setWindowTitle(_translate("UI_Client", "UI_Client"))
-        self.msg_area.setPlaceholderText(_translate("UI_Client", "Введите сообщение для отправки..."))
+        self.msg_area.setPlaceholderText(
+            _translate("UI_Client", "Введите сообщение для отправки...")
+        )
         self.send_msg.setText(_translate("UI_Client", "Отправить"))
         self.chat_label.setText(_translate("UI_Client", "Чат с пользователем"))
         self.search_cont.setPlaceholderText(_translate("UI_Client", "Поиск...."))
