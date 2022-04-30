@@ -35,6 +35,13 @@ class Client(QObject):
     new_message = pyqtSignal(dict)
 
     def __init__(self, connection_address, connection_port):
+        """
+        Client initialization.
+
+        Args:
+            connection_address (str): server address
+            connection_port (int): server port
+        """
         super().__init__()
         self.username = None
         self.database = None
@@ -51,6 +58,13 @@ class Client(QObject):
         self.MessageReciever.start()
 
     def init_connection(self, connection_address, connection_port):
+        """
+        Connect to server.
+
+        Args:
+            connection_address (str): server address
+            connection_port (int): server port
+        """
         self.transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.transport.connect((connection_address, connection_port))
 
@@ -65,25 +79,27 @@ class Client(QObject):
         #     print('Успешное подключение')
 
     def success_login(self, username):
+        """
+        After successful login user recieves 'username' field and starts connection to db.
+
+        Args:
+            username (str): client's username
+        """
         self.username = username
         self.database = ClientDatabase(username)
 
-    def presence_msg(self):
-        message = {
-            "action": "presence",
-            "time": time(),
-            "type": "status",
-            "user": {"account_name": self.username, "status": MESSAGE_STATUS},
-        }
-        return message
-
-    def process_response(self, response):
-        if response["response"] == 200:
-            return "SUCCESS"
-        elif response["response"] == 400:
-            raise Exception
 
     def sign_up(self, username, password):
+        """
+        Sign up function.
+
+        Args:
+            username (str): user's name
+            password (str): user's password
+
+        Returns:
+            dict: message sent to server
+        """
         password = hmac.new(
             password.encode("utf-8"), f"{username}".encode("utf-8"), "MD5"
         )
@@ -96,6 +112,16 @@ class Client(QObject):
         return request
 
     def log_in(self, username, password):
+        """
+        Log in function.
+
+        Args:
+            username (str): user's name
+            password (str): user's password
+
+        Returns:
+            dict: message sent to server
+        """
         password = hmac.new(
             password.encode("utf-8"), f"{username}".encode("utf-8"), "MD5"
         )
@@ -108,6 +134,16 @@ class Client(QObject):
         return request
 
     def create_message(self, to_user, message_text):
+        """
+        Create message for further sending to target user.
+
+        Args:
+            to_user (str): target user's name
+            message_text (str): message content
+
+        Returns:
+            dict: message sent to server
+        """
         message_to_send = {
             "action": "msg",
             "time": time(),
@@ -120,6 +156,15 @@ class Client(QObject):
         return message_to_send
 
     def add_contact(self, contact):
+        """
+        Add contact func.
+
+        Args:
+            contact (str): new contact username
+
+        Returns:
+            dict: message sent to server
+        """
         add_request = {
             "action": "add_contact",
             "time": time(),
@@ -130,6 +175,15 @@ class Client(QObject):
         return add_request
 
     def del_contact(self, contact):
+        """
+        Del contact func.
+
+        Args:
+            contact (str):  contact's username
+
+        Returns:
+            dict: message sent to server
+        """
         del_request = {
             "action": "del_contact",
             "time": time(),
@@ -140,6 +194,12 @@ class Client(QObject):
         return del_request
 
     def get_contacts(self):
+        """
+        Contacts list request func.
+
+        Returns:
+            dict: message sent to server
+        """
         request = {
             "action": "get_contacts",
             "time": time(),
@@ -148,12 +208,27 @@ class Client(QObject):
         return request
 
     def exit_message(self):
+        """
+        Message sent on exit.
+
+        Returns:
+            dict: message sent to server
+        """
         request = {"action": "exit",
                    "time": time(), "account_name": self.username}
         self.MessageSender.messages_to_send.append(request)
         return request
 
     def find_user(self, username):
+        """
+        Function used to find target user.
+
+        Args:
+            username (str): target user's name
+
+        Returns:
+            dict: message sent to server
+        """
         request = {
             "action": "search",
             "time": time(),
