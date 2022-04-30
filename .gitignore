@@ -129,3 +129,7 @@ dmypy.json
 .pyre/
 .client/databases/
 settings.json
+doc
+_static
+_templates
+log/__pycache__

@@ -1,0 +1,29 @@
+Server module documentation
+=================================================
+
+Серверный модуль мессенджера. Состоит из 3-ёх частей: обработчика подключений, обработчика сообщений и отправщика сообщений.
+Поддерживает аргументы командной строки:
+
+``python async_server.py {порт} {адрес}``
+
+1. {порт} - порт на котором принимаются соединения.
+2. {адрес} - адрес с которого принимаются соединения.
+
+Пример запуска из основной директории:
+
+* ``python server/async_server.py``
+
+*Запуск приложения с параметрами по умолчанию.*
+
+async_server.py
+~~~~~~~~~~~~~~~
+
+.. autoclass:: server.async_server.Server
+    :members:
+
+.. autoclass:: server.async_server.MessageProcessor
+    :members:
+
+.. autoclass:: server.async_server.MessageSender
+    :members:
+
