@@ -128,3 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .client/databases/
+settings.json
+doc
+_static
+_templates
+log/__pycache__

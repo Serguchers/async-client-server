@@ -1,3 +1,24 @@
+from login_window import Window
+from main_window import ClientMainWindow
+from PyQt5.QtWidgets import QApplication
+from PyQt5.QtCore import pyqtSignal, QObject
+from clientstorage import ClientDatabase
+from threading import Thread
+from common.utils import send_message, convert_to_dict, suppress_qt_warnings
+import argparse
+from log.utils import log_deco
+from time import time, sleep
+from common.variables import (
+    ACCOUNT_NAME,
+    MESSAGE_STATUS,
+    DEFAULT_IP,
+    DEFAULT_PORT,
+    DEFAULT_CLIENT_MODE,
+)
+from log import client_log_config
+import logging
+import hmac
+import socket
 from pydoc import cli
 import sys
 import os
@@ -5,47 +26,45 @@ import os
 sys.path.append(os.getcwd())
 sys.path.append(os.path.dirname(__file__))
 
-import socket
-import hmac
-import logging
-from log import client_log_config
-from common.variables import ACCOUNT_NAME, MESSAGE_STATUS, DEFAULT_IP, DEFAULT_PORT, DEFAULT_CLIENT_MODE
-from time import time, sleep
-from log.utils import log_deco
-import argparse
-from common.utils import send_message, convert_to_dict, suppress_qt_warnings
-from threading import Thread
-from clientstorage import ClientDatabase
-from PyQt5.QtCore import pyqtSignal, QObject
-from PyQt5.QtWidgets import QApplication
-from main_window import ClientMainWindow
-from login_window import Window
 
-log_client = logging.getLogger('client_logger')
-
+log_client = logging.getLogger("client_logger")
 
 
 class Client(QObject):
-    
+
     new_message = pyqtSignal(dict)
-    
+
     def __init__(self, connection_address, connection_port):
+        """
+        Client initialization.
+
+        Args:
+            connection_address (str): server address
+            connection_port (int): server port
+        """
         super().__init__()
         self.username = None
         self.database = None
         self.transport = None
 
         self.init_connection(connection_address, connection_port)
-        
+
         self.MessageSender = MessageSender()
         self.MessageSender.setClient(self)
         self.MessageSender.start()
-        
+
         self.MessageReciever = MessageReciever()
         self.MessageReciever.setClient(self)
         self.MessageReciever.start()
-        
+
     def init_connection(self, connection_address, connection_port):
+        """
+        Connect to server.
+
+        Args:
+            connection_address (str): server address
+            connection_port (int): server port
+        """
         self.transport = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.transport.connect((connection_address, connection_port))
 
@@ -58,164 +77,239 @@ class Client(QObject):
         #     print('Произошла ошибка при подключении')
         # else:
         #     print('Успешное подключение')
-    
+
     def success_login(self, username):
+        """
+        After successful login user recieves 'username' field and starts connection to db.
+
+        Args:
+            username (str): client's username
+        """
         self.username = username
         self.database = ClientDatabase(username)
-    
-    def presence_msg(self):
-        message = {
-            "action": "presence",
-            "time": time(),
-            "type": "status",
-            "user": {
-                "account_name": self.username,
-                "status": MESSAGE_STATUS
-            }
-        }
-        return message
-    
-    def process_response(self, response):
-        if response['response'] == 200:
-            return 'SUCCESS'
-        elif response['response'] == 400:
-            raise Exception
+
 
     def sign_up(self, username, password):
-        password = hmac.new(password.encode('utf-8'), f'{username}'.encode('utf-8'), 'MD5')
+        """
+        Sign up function.
+
+        Args:
+            username (str): user's name
+            password (str): user's password
+
+        Returns:
+            dict: message sent to server
+        """
+        password = hmac.new(
+            password.encode("utf-8"), f"{username}".encode("utf-8"), "MD5"
+        )
         request = {
-            'action': 'sign up',
-            'account_name': username,
-            'password': password.hexdigest()
+            "action": "sign up",
+            "account_name": username,
+            "password": password.hexdigest(),
         }
         self.MessageSender.messages_to_send.append(request)
         return request
-    
+
     def log_in(self, username, password):
-        password = hmac.new(password.encode('utf-8'), f'{username}'.encode('utf-8'), 'MD5')
+        """
+        Log in function.
+
+        Args:
+            username (str): user's name
+            password (str): user's password
+
+        Returns:
+            dict: message sent to server
+        """
+        password = hmac.new(
+            password.encode("utf-8"), f"{username}".encode("utf-8"), "MD5"
+        )
         request = {
-            'action': 'log in',
-            'account_name': username,
-            'password': password.hexdigest()
+            "action": "log in",
+            "account_name": username,
+            "password": password.hexdigest(),
         }
         self.MessageSender.messages_to_send.append(request)
         return request
 
     def create_message(self, to_user, message_text):
+        """
+        Create message for further sending to target user.
+
+        Args:
+            to_user (str): target user's name
+            message_text (str): message content
+
+        Returns:
+            dict: message sent to server
+        """
         message_to_send = {
-            'action': 'msg',
-            'time': time(),
-            'account_name': self.username,
-            'destination': to_user,
-            'message_text': message_text
+            "action": "msg",
+            "time": time(),
+            "account_name": self.username,
+            "destination": to_user,
+            "message_text": message_text,
         }
-        
+
         self.MessageSender.messages_to_send.append(message_to_send)
         return message_to_send
 
     def add_contact(self, contact):
+        """
+        Add contact func.
+
+        Args:
+            contact (str): new contact username
+
+        Returns:
+            dict: message sent to server
+        """
         add_request = {
-            'action': 'add_contact',
-            'time': time(),
-            'account_name': self.username,
-            'destination': contact
+            "action": "add_contact",
+            "time": time(),
+            "account_name": self.username,
+            "destination": contact,
         }
         self.MessageSender.messages_to_send.append(add_request)
         return add_request
-    
+
     def del_contact(self, contact):
+        """
+        Del contact func.
+
+        Args:
+            contact (str):  contact's username
+
+        Returns:
+            dict: message sent to server
+        """
         del_request = {
-            'action': 'del_contact',
-            'time': time(),
-            'account_name': self.username,
-            'destination': contact
+            "action": "del_contact",
+            "time": time(),
+            "account_name": self.username,
+            "destination": contact,
         }
         self.MessageSender.messages_to_send.append(del_request)
         return del_request
 
     def get_contacts(self):
-        request  = {
-            'action': 'get_contacts',
-            'time': time(),
-            'account_name': self.username
+        """
+        Contacts list request func.
+
+        Returns:
+            dict: message sent to server
+        """
+        request = {
+            "action": "get_contacts",
+            "time": time(),
+            "account_name": self.username,
         }
         return request
-    
+
     def exit_message(self):
-        request = {
-            'action': 'exit',
-            'time': time(),
-            'account_name': self.username
-        }
+        """
+        Message sent on exit.
+
+        Returns:
+            dict: message sent to server
+        """
+        request = {"action": "exit",
+                   "time": time(), "account_name": self.username}
         self.MessageSender.messages_to_send.append(request)
         return request
- 
+
     def find_user(self, username):
+        """
+        Function used to find target user.
+
+        Args:
+            username (str): target user's name
+
+        Returns:
+            dict: message sent to server
+        """
         request = {
-            'action': 'search',
-            'time': time(),
-            'account_name': self.username,
-            'target_user': username
+            "action": "search",
+            "time": time(),
+            "account_name": self.username,
+            "target_user": username,
         }
         self.MessageSender.messages_to_send.append(request)
         return request
-    
-        
+
+
 class MessageReciever(Thread):
     def __init__(self):
         super().__init__()
         self.daemon = True
         self.client = None
-    
+
     def setClient(self, client):
         self.client = client
-        
+
     def run(self):
         while True:
             try:
                 message = self.client.transport.recv(1024)
                 message = convert_to_dict(message)
-                if message['action'] == 'msg' and message['message_text'] and message['account_name']:
-                    self.client.new_message.emit(message) 
-                elif message['action'] == 'add_contact' and message['status'] == 'success':
-                    self.client.new_message.emit(message) 
-                elif message['action'] == 'del_contact' and message['status'] == 'success':
-                    self.client.new_message.emit(message) 
-                elif message['action'] == 'get_contacts' and message['status'] == 'success':
-                    contacts = ', '.join(message['contacts'])
-                elif message['action'] == 'message_user':
-                    if message['status'] == 'success':
-                        self.client.database.meet_user(message['target_user'])    
-                elif message['action'] == 'search':
+                if (
+                    message["action"] == "msg"
+                    and message["message_text"]
+                    and message["account_name"]
+                ):
                     self.client.new_message.emit(message)
-                elif message['action'] == 'sign up':
-                    if message['status'] == 'success':
+                elif (
+                    message["action"] == "add_contact"
+                    and message["status"] == "success"
+                ):
+                    self.client.new_message.emit(message)
+                elif (
+                    message["action"] == "del_contact"
+                    and message["status"] == "success"
+                ):
+                    self.client.new_message.emit(message)
+                elif (
+                    message["action"] == "get_contacts"
+                    and message["status"] == "success"
+                ):
+                    contacts = ", ".join(message["contacts"])
+                elif message["action"] == "message_user":
+                    if message["status"] == "success":
+                        self.client.database.meet_user(message["target_user"])
+                elif message["action"] == "search":
+                    self.client.new_message.emit(message)
+                elif message["action"] == "sign up":
+                    if message["status"] == "success":
                         self.client.new_message.emit(message)
                     else:
                         self.client.new_message.emit(message)
-                elif message['action'] == 'log in':
-                    if message['status'] == 'success':
+                elif message["action"] == "log in":
+                    if message["status"] == "success":
                         self.client.new_message.emit(message)
                     else:
                         print(message)
                         self.client.new_message.emit(message)
                 else:
-                    log_client.info(f'Поступило некорректное сообщение с сервера: {message}')
+                    log_client.info(
+                        f"Поступило некорректное сообщение с сервера: {message}"
+                    )
             except Exception:
-                log_client.critical(f'Произошла ошибка при приёме сообщения {message}')
+                log_client.critical(
+                    f"Произошла ошибка при приёме сообщения {message}")
                 break
-      
-        
+
+
 class MessageSender(Thread):
     def __init__(self):
         super().__init__()
         self.daemon = True
         self.client = None
         self.messages_to_send = []
-    
+
     def setClient(self, client):
         self.client = client
-    
+
     def run(self):
         while True:
             try:
@@ -223,31 +317,25 @@ class MessageSender(Thread):
             except IndexError:
                 pass
             except:
-                log_client.critical(f'Ошибка при отправке сообщения {message}')
+                log_client.critical(f"Ошибка при отправке сообщения {message}")
             else:
-                print(f'Отправлено сообщение {message}')
+                print(f"Отправлено сообщение {message}")
                 send_message(self.client.transport, message)
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser()
-    arg_parser.add_argument('addr', default=DEFAULT_IP, nargs='?')
-    arg_parser.add_argument('port', default=DEFAULT_PORT, type=int, nargs='?')
+    arg_parser.add_argument("addr", default=DEFAULT_IP, nargs="?")
+    arg_parser.add_argument("port", default=DEFAULT_PORT, type=int, nargs="?")
     namespace = arg_parser.parse_args()
     print(namespace.addr, namespace.port)
-    
-    client = Client(namespace.addr, namespace.port) 
+
+    client = Client(namespace.addr, namespace.port)
     client_app = QApplication(sys.argv)
-    
-    suppress_qt_warnings()  
+
+    suppress_qt_warnings()
 
     login_window = Window(client)
     main_window = ClientMainWindow(client)
     login_window.logged_in.connect(main_window.success_login)
     client_app.exec_()
-
-    
-    
-    
-    
