@@ -1,10 +1,12 @@
 import os 
 import sys
 sys.path.append(os.getcwd())
-sys.path.append(os.path.dirname(__file__))
+# sys.path.append(os.path.dirname(__file__))
+sys.path.append(f'{os.getcwd()}/../')
+
 
 from custrom_server_exceptions import UserAlreadyExistsError, WrongPassword
-from log import server_log_config
+from server.log import server_log_config
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QApplication, QMessageBox
@@ -410,9 +412,9 @@ if __name__ == "__main__":
     namespace = arg_parser.parse_args()
 
     config = configparser.ConfigParser()
-    config_path = f"{os.path.dirname(os.path.realpath(__file__))}/server.ini"
+    config_path = f"{os.getcwd()}/server.ini"
     config.read(config_path)
-    config["SETTINGS"]["database_path"] = os.path.dirname(__file__)
+    config["SETTINGS"]["database_path"] = os.getcwd()
 
     database_path = os.path.join(
         config["SETTINGS"]["database_path"], config["SETTINGS"]["database_file"]

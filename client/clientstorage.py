@@ -2,7 +2,8 @@ import os
 import sys
 
 sys.path.append(os.getcwd())
-sys.path.append(os.path.dirname(__file__))
+# sys.path.append(os.path.dirname(__file__))
+sys.path.append(f'{os.getcwd()}/../')
 
 import sqlalchemy
 import datetime
@@ -32,7 +33,7 @@ class ClientDatabase:
 
     def __init__(self, name):
         self.database_engine = sqlalchemy.create_engine(
-            f"sqlite:///{os.path.dirname(__file__)}/databases/client_{name}.db3",
+            f"sqlite:///{os.getcwd()}/databases/client_{name}.db3",
             echo=False,
             pool_recycle=7200,
             connect_args={"check_same_thread": False},

@@ -2,7 +2,8 @@ import sys
 import os
 
 sys.path.append(os.getcwd())
-sys.path.append(os.path.dirname(__file__))
+# sys.path.append(os.path.dirname(__file__))
+sys.path.append(f'{os.getcwd()}/../')
 
 from login_window import Window
 from main_window import ClientMainWindow
@@ -12,7 +13,6 @@ from clientstorage import ClientDatabase
 from threading import Thread
 from common.utils import send_message, convert_to_dict, suppress_qt_warnings
 import argparse
-from log.utils import log_deco
 from time import time, sleep
 from common.variables import (
     ACCOUNT_NAME,
@@ -25,7 +25,7 @@ from log import client_log_config
 import logging
 import hmac
 import socket
-from pydoc import cli
+
 
 
 log_client = logging.getLogger("client_logger")
@@ -289,7 +289,6 @@ class MessageReciever(Thread):
                     if message["status"] == "success":
                         self.client.new_message.emit(message)
                     else:
-                        print(message)
                         self.client.new_message.emit(message)
                 else:
                     log_client.info(
@@ -320,7 +319,6 @@ class MessageSender(Thread):
             except:
                 log_client.critical(f"Ошибка при отправке сообщения {message}")
             else:
-                print(f"Отправлено сообщение {message}")
                 send_message(self.client.transport, message)
 
 
@@ -329,7 +327,6 @@ if __name__ == "__main__":
     arg_parser.add_argument("addr", default=DEFAULT_IP, nargs="?")
     arg_parser.add_argument("port", default=DEFAULT_PORT, type=int, nargs="?")
     namespace = arg_parser.parse_args()
-    print(namespace.addr, namespace.port)
 
     client = Client(namespace.addr, namespace.port)
     client_app = QApplication(sys.argv)

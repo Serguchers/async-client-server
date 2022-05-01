@@ -2,7 +2,8 @@ import sys
 import os
 
 sys.path.append(os.getcwd())
-sys.path.append(os.path.dirname(__file__))
+# sys.path.append(os.path.dirname(__file__))
+sys.path.append(f'{os.getcwd()}/../')
 
 import logging
 import argparse
@@ -30,7 +31,6 @@ from PyQt5.QtCore import pyqtSlot, QEvent, Qt, QObject, pyqtSignal
 from client_ui.main_client_window import UI_Client
 from threading import Thread, Lock
 from PyQt5 import QtCore
-import socket
 from common.utils import *
 from time import time
 from log import client_log_config
@@ -261,7 +261,6 @@ class ClientMainWindow(QMainWindow):
 
         if close == QMessageBox.Yes:
             self.client.exit_message()
-            print("message sent")
             qApp.exit()
         else:
             pass
