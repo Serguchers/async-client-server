@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>Form</class>
  <widget class="QWidget" name="Form">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>273</width>
-    <height>155</height>
+    <width>274</width>
+    <height>153</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,12 +22,15 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(200, 228, 234)</string>
+  </property>
   <widget class="QWidget" name="verticalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>0</x>
      <y>10</y>
-     <width>251</width>
+     <width>271</width>
      <height>141</height>
     </rect>
    </property>
@@ -36,6 +42,15 @@
      <layout class="QVBoxLayout" name="vertical_inner">
       <item>
        <widget class="QLineEdit" name="password">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255)</string>
+        </property>
         <property name="placeholderText">
          <string>Password</string>
         </property>
@@ -43,6 +58,15 @@
       </item>
       <item>
        <widget class="QLineEdit" name="username">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255)</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -58,6 +82,12 @@
       <property name="spacing">
        <number>3</number>
       </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetDefaultConstraint</enum>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
       <property name="topMargin">
        <number>0</number>
       </property>
@@ -68,6 +98,18 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-width: 1px;
+border-style: solid;
+border-color: grey;
+background-color: rgb(255, 255, 255);</string>
         </property>
         <property name="text">
          <string>Login</string>
@@ -81,6 +123,18 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">border-width: 1px;
+border-style: solid;
+border-color: grey;
+background-color: rgb(255, 255, 255);</string>
         </property>
         <property name="text">
          <string>Sign up</string>
