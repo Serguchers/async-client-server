@@ -1,3 +1,9 @@
+import sys
+import os
+
+sys.path.append(os.getcwd())
+sys.path.append(os.path.dirname(__file__))
+
 from login_window import Window
 from main_window import ClientMainWindow
 from PyQt5.QtWidgets import QApplication
@@ -20,11 +26,6 @@ import logging
 import hmac
 import socket
 from pydoc import cli
-import sys
-import os
-
-sys.path.append(os.getcwd())
-sys.path.append(os.path.dirname(__file__))
 
 
 log_client = logging.getLogger("client_logger")

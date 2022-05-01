@@ -1,3 +1,8 @@
+import os 
+import sys
+sys.path.append(os.getcwd())
+sys.path.append(os.path.dirname(__file__))
+
 from custrom_server_exceptions import UserAlreadyExistsError, WrongPassword
 from log import server_log_config
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
@@ -19,12 +24,8 @@ import asyncio
 from email import message
 import logging
 import json
-import sys
 import configparser
-import os
 
-sys.path.append(os.getcwd())
-sys.path.append(os.path.dirname(__file__))
 
 
 log_server = logging.getLogger("server_logger")

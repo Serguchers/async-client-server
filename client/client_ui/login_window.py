@@ -11,57 +11,67 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class UI_Login_form(object):
+class Ui_Form(object):
     def setupUi(self, Form):
-        Form.setObjectName("Log in")
-        Form.resize(273, 155)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding
-        )
+        Form.setObjectName("Form")
+        Form.setEnabled(True)
+        Form.resize(274, 153)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Form.sizePolicy().hasHeightForWidth())
         Form.setSizePolicy(sizePolicy)
+        Form.setStyleSheet("background-color: rgb(200, 228, 234)")
         self.verticalLayoutWidget = QtWidgets.QWidget(Form)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 251, 141))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(0, 10, 271, 141))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.outer_layout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.outer_layout.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
         self.outer_layout.setContentsMargins(0, 0, 0, 0)
         self.outer_layout.setObjectName("outer_layout")
-        Form.setLayout(self.outer_layout)
         self.vertical_inner = QtWidgets.QVBoxLayout()
         self.vertical_inner.setObjectName("vertical_inner")
         self.username = QtWidgets.QLineEdit(self.verticalLayoutWidget)
+        self.username.setMinimumSize(QtCore.QSize(0, 25))
+        self.username.setStyleSheet("background-color: rgb(255, 255, 255)")
         self.username.setText("")
         self.username.setObjectName("username")
         self.vertical_inner.addWidget(self.username)
-        self.outer_layout.addLayout(self.vertical_inner)
         self.password = QtWidgets.QLineEdit(self.verticalLayoutWidget)
+        self.password.setMinimumSize(QtCore.QSize(0, 25))
+        self.password.setStyleSheet("background-color: rgb(255, 255, 255)")
         self.password.setObjectName("password")
         self.vertical_inner.addWidget(self.password)
+        self.outer_layout.addLayout(self.vertical_inner)
         self.horizontal_inner = QtWidgets.QHBoxLayout()
-        self.horizontal_inner.setContentsMargins(-1, 0, -1, -1)
+        self.horizontal_inner.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
+        self.horizontal_inner.setContentsMargins(0, 0, -1, -1)
         self.horizontal_inner.setSpacing(3)
         self.horizontal_inner.setObjectName("horizontal_inner")
         self.login_btn = QtWidgets.QPushButton(self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.login_btn.sizePolicy().hasHeightForWidth())
         self.login_btn.setSizePolicy(sizePolicy)
+        self.login_btn.setMinimumSize(QtCore.QSize(0, 25))
+        self.login_btn.setStyleSheet("border-width: 1px;\n"
+"border-style: solid;\n"
+"border-color: grey;\n"
+"background-color: rgb(255, 255, 255);")
         self.login_btn.setObjectName("login_btn")
         self.horizontal_inner.addWidget(self.login_btn)
         self.singup_btn = QtWidgets.QPushButton(self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed
-        )
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.singup_btn.sizePolicy().hasHeightForWidth())
         self.singup_btn.setSizePolicy(sizePolicy)
+        self.singup_btn.setMinimumSize(QtCore.QSize(0, 25))
+        self.singup_btn.setStyleSheet("border-width: 1px;\n"
+"border-style: solid;\n"
+"border-color: grey;\n"
+"background-color: rgb(255, 255, 255);")
         self.singup_btn.setObjectName("singup_btn")
         self.horizontal_inner.addWidget(self.singup_btn)
         self.outer_layout.addLayout(self.horizontal_inner)

@@ -1,6 +1,3 @@
-from distutils.log import log
-from msilib.schema import SelfReg
-from re import I
 import sys
 import os
 
@@ -89,6 +86,9 @@ class ClientMainWindow(QMainWindow):
             | QtCore.Qt.WindowTitleHint
             | QtCore.Qt.WindowMinimizeButtonHint
         )
+        
+        self.my_font = QFont("Segoe UI", 12)
+        
         self.known_users_update()
         self.show()
 
@@ -111,13 +111,15 @@ class ClientMainWindow(QMainWindow):
             if message[0] == self.current_chat:
                 message = QStandardItem(f"{message[1]}: \n{message[3]}")
                 message.setEditable(False)
-                message.setBackground(QBrush(QColor(255, 213, 213)))
+                message.setFont(self.my_font)
+                # message.setBackground(QBrush(QColor(255, 213, 213)))
                 message.setTextAlignment(Qt.AlignLeft)
                 self.message_history_model.appendRow(message)
             else:
                 message = QStandardItem(f"{message[1]}: \n{message[3]}")
                 message.setEditable(False)
-                message.setBackground(QBrush(QColor(61, 255, 171)))
+                message.setFont(self.my_font)
+                message.setBackground(QBrush(QColor(181, 219, 227)))
                 message.setTextAlignment(Qt.AlignRight)
                 self.message_history_model.appendRow(message)
 

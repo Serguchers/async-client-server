@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import (
     QMessageBox,
 )
 from PyQt5.QtCore import pyqtSlot, QEvent, Qt, QObject, pyqtSignal
-from client_ui.login_window import UI_Login_form
+from client_ui.login_window import Ui_Form
 
 
 class Window(QDialog):
@@ -19,7 +19,7 @@ class Window(QDialog):
 
     def __init__(self, client):
         super().__init__()
-        self.ui = UI_Login_form()
+        self.ui = Ui_Form()
         self.ui.setupUi(self)
 
         self.client = client
