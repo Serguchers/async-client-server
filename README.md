@@ -1,10 +1,9 @@
 # async-client-server
 Messenger. Server/client practice.
 
-Practice with socket/asyncio/thread libraries. 
-TODO:
-  - exception handling
-
-Start app:
- - server/async_server.py - to run server interface
- - client/client.py - to run client interface
+## Описание
+Проект, разработанный в рамках курса "Клиент-серверные приложения". Приложение состоит из 2-ух ключевых блоков: клиент и сервер.
+Клиентская часть приложения предоставляет возможность обмена сообщениями. Реализованы функции авторизации, поиска контакта и добавления в список контактов.
+[![2022-06-29-143346305.png](https://i.postimg.cc/Kjx5ry1x/2022-06-29-143346305.png)](https://postimg.cc/xJpHnhG4)
+Серверная часть позволяет отслеживать текущие подключения, просматривать историю клиентов, а также осущесвлять конфигурацию сервера.
+[![2022-06-29-143819380.png](https://i.postimg.cc/gcyxfZTM/2022-06-29-143819380.png)](https://postimg.cc/QVtN7Hs5)
